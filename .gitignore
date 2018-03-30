@@ -7,4 +7,5 @@ node_modules
 !/wp-content/plugins
 cgi-bin
 **/.sass-cache
-
+.ftpquota
+wp-admin/error_log
