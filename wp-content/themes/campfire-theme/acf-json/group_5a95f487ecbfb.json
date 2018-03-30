@@ -20,7 +20,7 @@
             ],
             "taxonomy": [],
             "allow_null": 1,
-            "multiple": 0,
+            "multiple": 1,
             "return_format": "object",
             "ui": 1
         }
@@ -47,5 +47,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1522373658
+    "modified": 1522376946
 }

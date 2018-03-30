@@ -30,18 +30,6 @@ class Episodes
             'supports' => array(
                 'title', 'editor', 'author', 'thumbnail'
             ),
-            // 'capability_type' => 'episode',
-            // 'capabilities' => array(
-            //     'publish_posts' => 'publish_episodes',
-            //     'edit_posts' => 'edit_episodes',
-            //     'edit_others_posts' => 'edit_others_episodes',
-            //     'delete_posts' => 'delete_episodes',
-            //     'delete_others_posts' => 'delete_others_episodes',
-            //     'read_private_posts' => 'read_private_episodes',
-            //     'edit_post' => 'edit_episode',
-            //     'delete_post' => 'delete_episode',
-            //     'read_post' => 'read_episode',
-            // ),
             'public' => true,
             'show_in_menu' => true,
             'menu_position' => 5,
@@ -55,7 +43,8 @@ class Episodes
      * @param  object $query
      * @return object $query
      */
-    function restrict_user_episodes($query) {
+    function restrict_user_episodes($query)
+    {
         global $pagenow;
      
         if ('edit.php' != $pagenow ||
@@ -67,13 +56,17 @@ class Episodes
      
         global $user_ID;
 
-        $podcast = get_field('podcast', 'user_'.$user_ID);
+        $podcasts = get_field('podcast', 'user_'.$user_ID);
+        $podcastIds = [];
+        foreach ($podcasts as $podcastItem) {
+            $podcastIds[] = $podcastItem->ID;
+        }
 
         $query->set('meta_query', array(
             array(
                 'key' => 'podcast',
-                'value' => $podcast->ID,
-                'compare' => '='
+                'value' => $podcastIds,
+                'compare' => 'IN'
             )
         ));
 

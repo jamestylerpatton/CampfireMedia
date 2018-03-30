@@ -19,7 +19,8 @@ class Podcasts
 
         add_action('save_post', array($this, 'import_new_podcast_posts'), 10, 2);
 
-        // add_action('wp', array($this,'import_podcasts'));
+        add_filter('manage_podcasts_posts_columns', array($this, 'podcast_author_head'));
+        add_action('manage_podcasts_posts_custom_column', array($this, 'podcast_author_content'), 10, 2);
     }
 
     function create_post_type() {
@@ -31,18 +32,6 @@ class Podcasts
             'supports' => array(
                 'title', 'editor', 'author', 'thumbnail'
             ),
-            // 'capability_type' => 'podcast',
-            // 'capabilities' => array(
-            //     'publish_posts' => 'publish_podcasts',
-            //     'edit_posts' => 'edit_podcasts',
-            //     'edit_others_posts' => 'edit_others_podcasts',
-            //     'delete_posts' => 'delete_podcasts',
-            //     'delete_others_posts' => 'delete_others_podcasts',
-            //     'read_private_posts' => 'read_private_podcasts',
-            //     'edit_post' => 'edit_podcast',
-            //     'delete_post' => 'delete_podcast',
-            //     'read_post' => 'read_podcast',
-            // ),
             'public' => true,
             'show_in_menu' => true,
             'menu_position' => 5,
@@ -69,8 +58,12 @@ class Podcasts
         global $user_ID;
 
         $podcast = get_field('podcast', 'user_'.$user_ID);
+        $podcastIds = array();
+        foreach ($podcast as $podcastItem) {
+            $podcastIds[] = $podcastItem->ID;
+        }
 
-        $query->set('p', $podcast->ID);
+        $query->set('post__in', $podcastIds);
 
         return $query;
     }
@@ -203,42 +196,47 @@ class Podcasts
         update_post_meta($podcast->ID, 'rss_updated', gmdate('Y-m-d H:i:s'));
     }
 
-    /*function import_podcasts() {
-        $podcasts = [ ['name' => 'Choose Your Own Religion', 'url' => 'http://chooseyourownreligion.libsyn.com/rss'], ['name' => 'Cheers, Stomps & Whistles', 'url' => 'http://cheersstompswhistles.libsyn.com/rss'], ['name' => 'Lizard People', 'url' => 'http://lizardpeopleshow.libsyn.com/rss'], ['name' => 'Honey', 'url' => 'http://honey.libsyn.com/rss'], ['name' => 'What the F**K Do I Do with My Jewish Hair?!', 'url' => 'http://wtfdidwmjh.libsyn.com/rss'], ['name' => 'Under the Top Part of a Boat', 'url' => 'http://uttpoab.libsyn.com/rss'], ['name' => 'My Name is Weezer', 'url' => 'http://mynameisweezer.libsyn.com/rss'], ['name' => 'TBToonz', 'url' => 'http://tbtoonz.libsyn.com/rss'], ['name' => 'In Defense', 'url' => 'http://indefense.libsyn.com/rss'], ['name' => 'The Parrothead Podcast', 'url' => 'http://parrotheadpodcast.libsyn.com/rss'], ['name' => 'Playing Favorites with Shane Lennon', 'url' => 'http://playingfavorites.libsyn.com/rss'], ['name' => 'Learnt Up', 'url' => 'http://learntup.libsyn.com/rss'], ['name' => 'Let\'s Fall In Love', 'url' => 'http://letsfallinlove.libsyn.com/rss'], ['name' => 'We Rebel', 'url' => 'http://werebel.libsyn.com/rss'], ['name' => 'Welcome To The Clambake', 'url' => 'http://welcometotheclambake.libsyn.com/rss'], ['name' => 'Inside the Disney Vault', 'url' => 'http://disneyvault.libsyn.com/rss'], ['name' => 'Under Her Eye', 'url' => 'http://underhereye.libsyn.com/rss'], ['name' => 'Extra Extra', 'url' => 'http://extraextra.libsyn.com/rss'], ['name' => 'Trust the Bachelor Process', 'url' => 'http://bachelorprocess.libsyn.com/rss'], ['name' => 'Hella In Your Thirties', 'url' => 'http://hellathirties.libsyn.com/rss'], ['name' => 'Kar Dishin\' It: All Things Kardashian', 'url' => 'http://kardishinit.libsyn.com/rss'], ['name' => 'I Burn Everything', 'url' => 'http://iburneverything.libsyn.com/rss'], ['name' => 'That\'s My Story, Period.', 'url' => 'http://thatsmystory.libsyn.com/rss'], ['name' => 'Everybody Up: A Discussion On Coaching Improv', 'url' => 'http://everybodyup.libsyn.com/rss'], ['name' => 'Nintendo Cartridge Society', 'url' => 'http://nintendo.libsyn.com/rss'], ['name' => 'Broad Jobs', 'url' => 'http://broadjobs.libsyn.com/rss'], ['name' => 'Mouth Feelings', 'url' => 'http://mouthfeelings.libsyn.com/rss'], ['name' => 'Same Day Shipping', 'url' => 'http://samedayshipping.libsyn.com/rss'], ['name' => 'ScaryTown', 'url' => 'http://scarytown.libsyn.com/rss'] ];
-        foreach ($podcasts as $podcast) {
-            $title = $podcast['name'];
-            $url = $podcast['url'];
+    /**
+     * Display Author filter for podcasts
+     * @return [type] [description]
+     */
+    function podcast_author_head($defaults) {
+        $defaults['users'] = 'Hosts';
+        return $defaults;
+    }
+    function podcast_author_content($column_name, $post_ID) {
+        if ($column_name == 'users') {
+            $args = array(
+                'meta_query' => array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => 'podcast',
+                        'value' => '"'.$post_ID.'"',
+                        'compare' => 'LIKE'
+                    ),
+                    array(
+                        'key' => 'podcast',
+                        'value' => $post_ID,
+                        'compare' => '='
+                    )
+                )
+            );
 
-            $xml = @file_get_contents($url);
+            // The Query
+            $user_query = new WP_User_Query( $args );
 
-            if (!$xml) {
-                continue;
+            // User Loop
+            if ( ! empty( $user_query->get_results() ) ) {
+                $podcastUsers = [];
+                foreach ( $user_query->get_results() as $user ) {
+                    $podcastUsers[] = $user->display_name;
+                }
+                echo implode($podcastUsers, ', ');
+            } else {
+                echo 'No users found.';
             }
-
-            $xmlElement = new SimpleXMLElement($xml);
-
-            $content = (string) $xmlElement->channel->description;
-
-            $insert_post = wp_insert_post(array(
-                'post_author' => 1,
-                'post_content' => $content,
-                'post_title' => $title,
-                'post_status' => 'publish',
-                'post_type' => 'podcasts',
-            ));
-
-            update_post_meta($insert_post, 'rss_feed_url', $url);
-
-            $image_url = (string) $xmlElement->channel->image->url;
-            $image_name = (string) $xmlElement->channel->image->title;
-
-            $attachment = new ImageUpload(array(
-                'url' => $image_url,
-                'post_id' => $insert_post,
-                'image_name' => $image_name . '.jpg'
-            ));
         }
-    }*/
+    }
 }
 
 new Podcasts();

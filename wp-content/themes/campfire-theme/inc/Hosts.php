@@ -69,7 +69,20 @@ class Hosts
         $(\'form#your-profile tr.user-language-wrap\').remove(); // remove the "Language" field
           
         $(\'form#your-profile tr.user-profile-picture\').remove(); // remove the "Profile Picture" field         
-        });</script>';
+        });</script>
+
+        <style>
+        form#your-profile tr.user-rich-editing-wrap,
+        form#your-profile tr.user-syntax-highlighting-wrap,
+        form#your-profile tr.user-admin-color-wrap,
+        form#your-profile tr.user-comment-shortcuts-wrap,
+        form#your-profile tr.user-admin-bar-front-wrap,
+        form#your-profile tr.user-language-wrap,
+        form#your-profile tr.user-profile-picture{
+            display: none;
+        }
+        </style>
+        ';
     }
 }
 
