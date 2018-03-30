@@ -1,0 +1,33 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% if podcast %}
+        {% set episode_podcast = TimberPost(podcast) %}
+        <div class="row mb-4 mt-2">
+            <div class="col text-uppercase">
+                <div class="breadcrumbs">
+                    <a href="/">HOME</a> /
+                    <a href="/podcasts">PODCASTS</a> /
+                    <a href="{{ episode_podcast.link }}">{{ episode_podcast.title }}</a> /
+                    <span>Episode Archive</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if title %}<h1 class="h2 mb-4">{{title}}</h1>{% endif %}
+
+    <div class="row">
+        {% for episode in posts %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                {% if podcast %}
+                    {% include ['tease-episodes-noimage.twig', 'tease.twig'] %}
+                {% else %}
+                    {% include ['tease-episodes.twig', 'tease.twig'] %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+    {% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 1, end_size: 1}) } %}
+{% endblock %}

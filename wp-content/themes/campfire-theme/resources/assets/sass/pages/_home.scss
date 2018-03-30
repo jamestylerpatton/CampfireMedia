@@ -1,0 +1,71 @@
+#homepage-banner,
+#podcast-banner{
+    margin-bottom: 30px;
+    overflow: hidden;
+    img{
+        max-width: 100%;
+        display: block;
+    }
+    .item{
+        border: 2px solid darken($white, 6%);
+        display: block;
+        max-width: 100%;
+        margin: 0 15px;
+        border-radius: 5px;
+    }
+    .banner-carousel{
+        padding: 0 50px;
+        .owl-stage-outer{
+            margin: auto;
+            overflow: visible;
+        }
+    }
+}
+
+#featured-podcasts,
+#latest-episodes,
+#featured-episodes{
+    margin-bottom: 40px;
+}
+
+#newsletter-signup{
+    background-color: $yellow;
+    padding: 40px 20px;
+    margin-bottom: 60px;
+    .text-col{
+        color: $white;
+    }
+    img{
+        max-width: 100%;
+    }
+    #mc_embed_signup{
+        width: 100%;
+    }
+    form{
+        position: relative;
+        background: $white;
+        padding: 20px;
+        input.email{
+            padding-right: 8rem;
+            border-radius: 0;
+            border: none;
+        }
+        button,
+        .btn{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        @include media-breakpoint-down(xs) {
+            padding: 10px;
+
+            button,
+            .btn{
+                position: static;
+                width: 100%;
+                display: block;
+                margin-top: 1rem;
+            }
+        }
+    }
+}

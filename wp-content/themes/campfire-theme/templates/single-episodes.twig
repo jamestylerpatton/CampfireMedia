@@ -1,0 +1,53 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% set podcast = TimberPost(post.get_field('podcast')) %}
+    <div class="content-wrapper episode-content">
+
+        <div class="row mb-4 mt-2">
+            <div class="col text-uppercase">
+                <div class="breadcrumbs">
+                    <a href="/">HOME</a> /
+                    <a href="/podcasts">PODCASTS</a> /
+                    <a href="{{ podcast.link }}">{{ podcast.title }}</a> /
+                    <span>{{ post.title }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="podcast"><a href="{{ podcast.link }}">{{ podcast.title }}</a></h2>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-10">
+                <article class="post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
+                    <h1 class="article-h1">{{ post.title }}</h1>
+                    <div class="host mb-4">Hosted By {{ podcast.author.name }}</div>
+
+                    <div class="audio-player-container mb-4">
+                        <img src="{{ post.thumbnail.src|resize(1200, 300) }}">
+                        <div class="audio-player large">
+                            <p class="audio-title">{{ post.title }}</p>
+                            <p class="audio-podcast-title">{{ podcast.title }}</p>
+                            <audio id="audio-player" class="" src="{{ post.mp3_link }}" type="audio/mp3" controls="controls"></audio>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            <section class="article-content">
+                                <div class="date text-right">{{ episode.post_date|date('M j, Y') }}</div>
+                                <div class="article-body">
+                                    {{post.content}}
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                </article>
+            </div>
+        </div>
+    </div><!-- /content-wrapper -->
+{% endblock %}

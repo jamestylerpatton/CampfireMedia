@@ -1,0 +1,29 @@
+.item.episode-noimage{
+    margin-bottom: 40px;
+    border: 2px solid darken($white, 6%);
+    .item-header{
+        background-color: $secondary;
+        padding: 10px;
+        .date{
+            color: $white;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        .episode-title{
+            margin: 0;
+            a{
+                color: $white;
+            }
+        }
+    }
+    .item-description-block{
+        padding: 10px;
+        p{
+            font-size: 0.9em;
+        }
+        .btn{
+            border-radius: 0;
+            border-width: 1px;
+        }
+    }
+}

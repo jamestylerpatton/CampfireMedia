@@ -1,0 +1,120 @@
+{% extends "base.twig" %}
+
+{% block page_banner %}
+    <div id="homepage-banner" class="container-fluid">
+        <div class="row">
+            <div class="banner-carousel owl-carousel owl-theme">
+                {% for banner in post.get_field('banner') %}
+                    <a class="item" href="{{ banner.banner_link }}">
+                        <img src="{{ TimberImage(banner.desktop_banner_image).src }}" alt="Big banner go here">
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <section id="featured-podcasts">
+        <h2>Featured Podcasts</h2>
+
+        <div class="row">
+            {% for podcast in post.get_field('featured_podcasts') %}
+                <div class="col-sm">
+                    {% include 'tease-podcasts.twig' %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section id="featured-episodes">
+        <h2>Featured Episodes</h2>
+
+        <div class="row">
+            {% for episode in post.get_field('featured_episodes') %}
+                {% set episode_podcast = TimberPost(episode.get_field('podcast')) %}
+                <div class="col-sm-6">
+                    <div class="item">
+                        <a href="{{ episode.link }}" class="item-img">
+                            <img src="{{ episode.thumbnail.src|resize(800, 300) }}" alt="{{ episode.title }} Banner">
+                        </a>
+                        <div class="item-description-block">
+                            <p class="podcast-title"><a href="{{ episode_podcast.link }}">{{ episode_podcast.title }}</a></p>
+                            <p class="episode-title"><a href="{{ episode.link }}">{{ episode.title }}</a></p>
+                            <p class="date">{{ episode.post_date|date('n/j/y') }}</p>
+                            <p class="short-description">
+                                {{ episode.post_content|excerpt(24) }}
+                            </p>
+                            <a href="{{ episode.link }}">Listen ></a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div id="newsletter-signup" class="p-5">
+        <div class="row">
+            <div class="col-lg-6 d-flex text-col">
+                <div class="align-self-center m-auto pt-3 pb-3">
+                    {# <h3 class="newsletter-header m-0">JOIN THE BONFIRE</h3> #}
+                    <div>
+                        <img class="mb-2" src="{{ site.theme.link }}/resources/images/text/join-the-bonfire.png" alt="JOIN THE BONFIRE" title="JOIN THE BONFIRE">
+                        <div class="text-center">Weekly emails about your favorite Campfire Media shows!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <!-- Begin MailChimp Signup Form -->
+                <div id="mc_embed_signup">
+                    <form action="https://media.us12.list-manage.com/subscribe/post?u=34c5a8922872a0774a7c5c9db&amp;id=66bf6ef617" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <div id="mc_embed_signup_scroll">
+                            <div class="mc-field-group">
+                                <label class="sr-only" for="mce-EMAIL">Email Address </label>
+                                <input type="email" value="" name="EMAIL" class="required email form-control" id="mce-EMAIL" placeholder="Enter Email">
+                            </div>
+                            <div id="mce-responses" class="clear">
+                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                <div class="response" id="mce-success-response" style="display:none"></div>
+                            </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_34c5a8922872a0774a7c5c9db_66bf6ef617" tabindex="-1" value=""></div>
+
+                            <div class="clear"><input type="submit" value="Sign Up" name="subscribe" id="mc-embedded-subscribe" class="btn btn-gradient btn-shadow"></div>
+                        </div>
+                    </form>
+                </div>
+                <!--End mc_embed_signup-->
+            </div>
+        </div>
+    </div>
+
+    <section id="latest-episodes">
+        <img class="mb-2" src="{{ site.theme.link }}/resources/images/test-images/header-img-accent.png">
+        <h3 class="mb-3">Latest Episodes</h3>
+
+        <div class="row">
+
+            {% for episode in latest_episodes %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    {% include 'tease-episodes.twig' %}
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="text-center">
+            <a href="/episodes" class="btn btn-gradient btn-shadow btn-image-text">
+                <span class="sr-only">SEE ALL</span>
+                <img src="{{ site.theme.link }}/resources/images/text/see-all.png" alt="SEE ALL">
+            </a>
+        </div>
+    </section>
+
+    {# <h2>{{ foo }}</h2>
+    <p>{{ qux }}</p>
+    {% for post in posts %}
+        {% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
+    {% endfor %}
+    
+    {% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %} #}
+{% endblock %}

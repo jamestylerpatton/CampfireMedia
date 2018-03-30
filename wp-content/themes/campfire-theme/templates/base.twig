@@ -1,0 +1,114 @@
+{% block html_head_container %}
+
+	{% include 'html-header.twig' %}
+	{% block head %}
+	{% endblock %}
+	</head>
+{% endblock %}
+
+	<body class="{{body_class}}" data-template="base.twig">
+		<div id="site-container">
+
+			{% include 'mobile-navigation.twig' %}
+
+			<div id="slide-container">
+				<div id="app">
+					{% block header %}
+						<header class="header container-fluid pt-3 pb-3">
+							<div class="row align-items-center justify-content-between">
+								<div class="col">
+									<nav class="nav-main navbar-light d-flex align-items-center" role="navigation">
+										<button class="navbar-toggler d-flex" type="button" data-toggle="collapse" data-target="#navbarToggleMobileContent" aria-controls="navbarToggleMobileContent" aria-expanded="false" aria-label="Toggle navigation">
+											<span class="navbar-toggler-icon"></span>
+										</button>
+										{# {% include "menu.twig" with {'menu': menu.get_items} %} #}
+										<ul class="nav d-none d-lg-flex">
+											<li class="nav-item">
+												<a class="nav-link active" href="/">Home</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="/about">About</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="/podcasts">Podcasts</a>
+											</li>
+										</ul>
+									</nav><!-- #nav -->
+								</div>
+								<div class="col-auto logo-col text-center">
+									<h1 class="hdr-logo" role="banner">
+										<a title="{{ site.name }}" class="hdr-logo-link" href="{{site.url}}" rel="home">
+											<span class="sr-only">{{site.name}}</span>
+											<img src="{{ site.theme.link }}/resources/images/campfire-logo.png" alt="{{ site.name }}">
+										</a>
+									</h1>
+								</div>
+								<div class="col">
+									<nav class="nav-main d-flex align-items-center justify-content-end" role="navigation">
+										<ul class="nav d-none d-lg-flex">
+											<li class="nav-item">
+												<a class="nav-link active" href="/blog">Blog</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="/contact">Contact</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="https://campfiremedia.threadless.com/" target="_blank">Shop</a>
+											</li>
+										</ul>
+										<ul class="nav socials">
+											<li class="nav-item">
+												<a target="_blank" href="https://www.facebook.com/WeAreCampfire" class="nav-link"><i class="fab fa-facebook-f"></i></a>
+											</li>
+											<li class="nav-item">
+												<a target="_blank" href="https://twitter.com/WeAre_Campfire" class="nav-link"><i class="fab fa-twitter"></i></a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</header>
+					{% endblock %}
+
+					{% block page_banner %}{% endblock %}
+
+					<section id="content" role="main" class="content-wrapper container">
+						<div class="wrapper {{sidebar_class}}">
+							{% block content %}
+								Sorry, no content
+							{% endblock %}
+						</div>
+						{% if sidebar %}
+							<aside class="layout-sidebar">
+								{{sidebar}}
+							</aside>
+						{% endif %}
+					</section>
+				</div>
+
+				{% block footer %}
+					<footer id="footer">
+						{% include 'footer.twig' %}
+					</footer>
+					{{ function('wp_footer') }}
+				{% endblock %}
+			</div>
+		</div>
+
+		<script type="text/javascript">
+		(function($){
+			$(document).ready(function() {
+				$('#audio-player').mediaelementplayer({
+					features: ['playpause', 'progress', 'current', 'duration'],
+					audioVolume: 'horizontal',
+					audioWidth: '100%',
+					audioHeight: '100',
+					timeAndDurationSeparator: ' / ',
+				});
+			});
+		})(jQuery);
+		</script>
+
+		<script src="{{ site.theme.link }}/js/app.js"></script>
+	</body>
+</html>

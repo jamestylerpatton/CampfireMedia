@@ -1,0 +1,60 @@
+{% if posts.pagination.pages is not empty %}
+    <div class="pagination-block p-3">
+        <ul class="pagination pagination-sm justify-content-center">
+            {% if pagination.pages|first and pagination.pages|first.current != true %}
+                <li class="first page-item">
+                    <a class="page-link" href="{{ pagination.pages|first.link }}">First</a>
+                </li>
+            {% else %}
+                <li class="first page-item disabled">
+                    <a class="page-link">First</a>
+                </li>
+            {% endif %}
+
+            {% if pagination.prev %}
+                <li class="prev page-item">
+                    <a class="page-link" href="{{ pagination.prev.link }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="prev page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for page in pagination.pages %}
+                {% if page.link %}
+                    <li class="page-item">
+                        <a href="{{ page.link }}" class="page-link {{ page.class }}">{{ page.title }}</a>
+                    </li>
+                {% else %}
+                    <li class="current page-item">
+                        <a class="page-link {{ page.class }}">{{ page.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.next %}
+                <li class="next page-item">
+                    <a class="page-link" href="{{ pagination.next.link }}">
+                        Next
+                    </a>
+                </li>
+            {% else %}
+                <li class="next page-item disabled">
+                    <a class="page-link">
+                        Next
+                    </a>
+                </li>
+            {% endif %}
+            {% if pagination.pages|last and pagination.pages|last.current != true %}
+                <li class="last page-item">
+                    <a class="page-link" href="{{ pagination.pages|last.link }}">Last</a>
+                </li>
+            {% else %}
+                <li class="last page-item disabled">
+                    <a class="page-link">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}

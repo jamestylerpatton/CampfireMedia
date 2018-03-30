@@ -1,0 +1,43 @@
+#featured-episodes .item,
+.item.podcast,
+.item.episode{
+    margin-bottom: 40px;
+    .item-img{
+        margin-bottom: 10px;
+        overflow: hidden;
+        border-radius: 5px;
+        border: 2px solid darken($white, 10%);
+        display: block;
+        img{
+            max-width: 100%;
+            display: block;
+        }
+    }
+    .item-title a{
+        text-transform: uppercase;
+        color: $secondary;
+        font-size: 15px;
+        font-weight: $font-weight-normal;
+    }
+    .item-description-block{
+        p{
+            margin-bottom: 0;
+        }
+        .podcast-title a{
+            text-transform: uppercase;
+            color: $secondary;
+            font-weight: $font-weight-bold;
+        }
+        .episode-title a{
+            color: $dark;
+            font-weight: $font-weight-normal;
+            font-size: 1.13rem;
+        }
+        .date{
+            color: $primary;
+        }
+        .short-description{
+            margin-bottom: 0.5rem;
+        }
+    }
+}

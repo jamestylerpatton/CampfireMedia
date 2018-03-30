@@ -1,0 +1,21 @@
+.episode-content{
+    h2.podcast{
+        left: 0;
+    }
+    h1{
+        font-size: 2.25rem;
+        color: $primary;
+    }
+    .host{
+        a{
+            color: $body-color;
+        }
+    }
+    img{
+        max-width: 100%;
+    }
+
+    #audio-player{
+        width: 100%;
+    }
+}

@@ -1,0 +1,12 @@
+<div class="item episode-noimage">
+    <div class="item-header">
+        <p class="date">{{ episode.post_date|date('M j, Y') }}</p>
+        <p class="episode-title"><a href="{{ episode.link }}">{{ episode.title }}</a></p>
+    </div>
+    <div class="item-description-block">
+        <p class="short-description">
+            {{ episode.post_content|excerpt(18) }}
+        </p>
+        <a class="btn btn-primary-outline btn-block" href="{{ episode.link }}">Listen</a>
+    </div>
+</div>

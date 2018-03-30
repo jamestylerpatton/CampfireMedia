@@ -1,0 +1,99 @@
+{% extends "base.twig" %}
+
+{% block page_banner %}
+    <div id="podcast-banner" class="container-fluid">
+        <div class="row">
+            <img src="{{ post.thumbnail.src|resize(2000, 440) }}">
+        </div>
+
+        <div class="banner-socials container">
+            <nav class="text-right social-links">
+                {% if post.apple_podcasts %}
+                <a target="_blank" href="{{ post.apple_podcasts }}" class="d-inline-block p-2"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
+                {% endif %}
+                {% if post.facebook %}
+                <a target="_blank" href="{{ post.facebook }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
+                {% endif %}
+                {% if post.twitter %}
+                <a target="_blank" href="{{ post.twitter }}" class="social-link d-inline-block p-2"><i class="fab fa-twitter"></i></a>
+                {% endif %}
+                {% if post.instagram %}
+                <a target="_blank" href="{{ post.instagram }}" class="social-link d-inline-block p-2"><i class="fab fa-instagram"></i></a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <section class="podcast-content mb-5">
+
+        <div class="row mb-2">
+            <div class="col text-uppercase">
+                <div class="breadcrumbs">
+                    <a href="/">HOME</a> /
+                    <a href="/podcasts">PODCASTS</a> /
+                    <a href="{{ post.link }}">{{ post.title }}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mb-4 {{ post.get_field('modules') ? 'col-lg-3 col-sm-6' : 'col-lg-6' }}">
+                <div class="rss-link mb-1">
+                    <a target="_blank" href="{{post.rss_feed_url}}">
+                        <i class="fas fa-rss"></i>
+                    </a>
+                </div>
+
+                <h1 class="h3 text-uppercase">About The Show</h1>
+
+                <div class="article-body">
+                    {{post.content}}
+                </div>
+
+                <div class="authors">
+                    <a href="{{post.author.path}}"> {{ post.author.name }} </a>
+                </div>
+            </div>
+
+            {% if post.get_field('modules') %}
+                <div class="mb-4 col-lg-3 col-sm-6">
+                    {% for module in post.get_field('modules') %}
+                        {% include 'modules/' ~ module.acf_fc_layout ~ '.twig' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="mb-4 col-lg-6">
+                <div class="episode-list">
+                    {% for episode in episodes %}
+                        {% if loop.index == 1 %}
+                            <div class="episode-teaser d-flex">
+                                <img src="{{ episode.thumbnail.src('thumbnail') }}">
+                                <div class="audio-player small">
+                                    <p class="audio-podcast-title">{{ episode.title }}</p>
+                                    <audio id="audio-player" src="{{ episode.mp3_link }}" type="audio/mp3" controls="controls"></audio>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="episode pt-3 pb-3">
+                            <div class="date text-right">{{ episode.post_date|date('n/j/y') }}</div>
+                            <h3 class="h6"><a href="{{ episode.link }}">{{ episode.title }}</a></h3>
+                            <p>
+                                {{ episode.content|excerpt(26) }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <a href="{{ post.link }}episodes" class="btn btn-gradient btn-block btn-image-text">
+                    <span class="sr-only">VIEW ARCHIVES</span>
+                    <img src="{{ site.theme.link }}/resources/images/text/view-archives.png" alt="VIEW ARCHIVES">
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

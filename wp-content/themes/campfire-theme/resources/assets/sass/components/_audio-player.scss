@@ -1,0 +1,105 @@
+.audio-player{
+    position: relative;
+    border: 2px solid darken($white, 15%);
+    background-color: darken($white, 10%);
+    padding: 0 10px;
+    overflow: hidden;
+
+    .audio-title,
+    .audio-podcast-title{
+        position: absolute;
+        z-index: 10;
+        left: 100px;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .audio-title{
+        top: 20px;
+        right: 30px;
+        font-size: 14px;
+    }
+    .audio-podcast-title{
+        bottom: 20px;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    &.small .audio-podcast-title{
+        top: 20px;
+        right: 30px;
+        bottom: auto;
+    }
+
+    .mejs-container,
+    .mejs-container .mejs-controls{
+        background-color: transparent;
+    }
+
+    .mejs-container .mejs-controls{
+        height: 100px;
+        @extend .align-items-center;
+    }
+
+    .mejs-button{
+        width: 60px;
+        height: 60px;
+        position: relative;
+        margin-right: 10px;
+        button{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-image: url(/wp-content/themes/campfire-theme/resources/images/icons/pause-play-sprite.png);
+            background-size: 100% auto;
+        }
+        &.mejs-pause > button{
+            background-position: top 100% center;
+        }
+    }
+
+    .mejs-time-float{
+        border: 0;
+    }
+
+    .mejs-time-buffering,
+    .mejs-time-current,
+    // .mejs-time-float,
+    // .mejs-time-float-corner,
+    // .mejs-time-float-current,
+    .mejs-time-hovered,
+    .mejs-time-loaded,
+    .mejs-time-marker,
+    .mejs-time-total{
+        height: 6px;
+    }
+    .mejs-time-handle,
+    .mejs-time-handle-content{
+        border: 2px solid transparent;
+    }
+
+    .mejs-controls{
+        .mejs-time-rail{
+            .mejs-time-current{
+                background-color: $orange;
+            }
+            .mejs-time-total{
+                background-color: darken($white, 50%);
+                margin: 6px 0 0;
+            }
+            .mejs-time-loaded{
+                background-color: darken($white, 40%);
+            }
+        }
+        .mejs-time{
+            position: absolute;
+            height: auto;
+            bottom: 20px;
+            right: 15px;
+            color: $dark;
+            line-height: 1rem;
+        }
+    }
+}
