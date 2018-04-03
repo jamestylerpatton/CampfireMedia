@@ -52,9 +52,17 @@
                     {{post.content}}
                 </div>
 
+                {% if hosts %}
                 <div class="authors">
-                    <a href="{{post.author.path}}"> {{ post.author.name }} </a>
+                    <h3>{{ hosts|length > 1 ? 'Hosts' : 'Host'}}</h3>
+                    {% for host in hosts %}
+                        {% set podcastHost = TimberUser(host) %}
+                        <div class="author-item">
+                            {{ podcastHost.name }}
+                        </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
             {% if post.get_field('modules') %}

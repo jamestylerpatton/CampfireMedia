@@ -24,7 +24,7 @@
             <div class="col-md-10">
                 <article class="post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
                     <h1 class="article-h1">{{ post.title }}</h1>
-                    <div class="host mb-4">Hosted By {{ podcast.author.name }}</div>
+                    <div class="host mb-4">Hosted By {{ hosts }}</div>
 
                     <div class="audio-player-container mb-4">
                         <img src="{{ post.thumbnail.src|resize(1200, 300) }}">
