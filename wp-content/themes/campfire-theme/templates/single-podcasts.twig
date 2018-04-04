@@ -3,7 +3,22 @@
 {% block page_banner %}
     <div id="podcast-banner" class="container-fluid">
         <div class="row">
-            <img src="{{ post.thumbnail.src|resize(2000, 440) }}">
+            {% if post.get_field('banner_image') %}
+                {% set banner = TimberImage(post.get_field('banner_image')) %}
+                {# desktop #}
+                <img class="d-none d-md-block" src="{{ banner.src('banner_wide') }}" alt="{{ post.title }} banner">
+                {# tablet #}
+                <img class="d-none d-sm-block d-md-none" src="{{ post.thumbnail.src|resize(800, 600) }}" alt="{{ post.title }} banner">
+                {# mobile #}
+                <img class="d-block d-sm-none" src="{{ post.thumbnail.src('featured_square') }}" alt="{{ post.title }} banner">
+            {% else %}
+                {# desktop #}
+                <img class="d-none d-md-block" src="{{ post.thumbnail.src|resize(2000, 440) }}" alt="{{ post.title }} banner">
+                {# tablet #}
+                <img class="d-none d-sm-block d-md-none" src="{{ post.thumbnail.src|resize(800, 600) }}" alt="{{ post.title }} banner">
+                {# mobile #}
+                <img class="d-block d-sm-none" src="{{ post.thumbnail.src('featured_square') }}" alt="{{ post.title }} banner">
+            {% endif %}
         </div>
 
         <div class="banner-socials container">
