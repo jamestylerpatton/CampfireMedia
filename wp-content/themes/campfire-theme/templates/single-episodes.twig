@@ -27,7 +27,18 @@
                     <div class="host mb-4">Hosted By {{ hosts }}</div>
 
                     <div class="audio-player-container mb-4">
-                        <img src="{{ post.thumbnail.src|resize(1200, 300) }}">
+
+                        {% if episode.get_field('banner_image_optional') %}
+                            {% set banner = TimberImage(episode.get_field('banner_image_optional')) %}
+                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                        {% elseif podcast.get_field('banner_image') %}
+                            {% set banner = TimberImage(podcast.get_field('banner_image')) %}
+                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                        {% else %}
+                            <img src="{{ episode.thumbnail.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                        {% endif %}
+
+                        {# <img src="{{ post.thumbnail.src|resize(1200, 300) }}"> #}
                         <div class="audio-player large">
                             <p class="audio-title">{{ post.title }}</p>
                             <p class="audio-podcast-title">{{ podcast.title }}</p>
