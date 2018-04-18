@@ -1,0 +1,31 @@
+.form-control{
+    border-width: 2px;
+}
+
+form.wpcf7-form{
+    label{
+        font-weight: $font-weight-bold;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin: 0;
+    }
+    .wpcf7-submit{
+        float: right;
+    }
+
+    .wpcf7-response-output{
+        @extend .alert;
+    }
+    div.wpcf7-mail-sent-ok{
+        @extend .alert-success;
+    }
+    div.wpcf7-mail-sent-ng,
+    div.wpcf7-aborted,
+    div.wpcf7-spam-blocked{
+        @extend .alert-danger;
+    }
+    div.wpcf7-validation-errors,
+    div.wpcf7-acceptance-missing{
+        @extend .alert-warning;
+    }
+}

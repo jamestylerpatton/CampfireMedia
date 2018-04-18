@@ -15,6 +15,11 @@ const app = new Vue({
                 autoplay: true
             });
         });
+
+        document.addEventListener( 'wpcf7mailsent', function( event ) {
+            let $target = $(event.target).find('.form-fields');
+            $target.hide();
+        }, false );
     }
 });
 

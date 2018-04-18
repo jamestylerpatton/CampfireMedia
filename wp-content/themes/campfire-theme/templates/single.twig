@@ -12,7 +12,7 @@
 		{% endif %}
 
 		<div class="row justify-content-center mb-5 mt-5">
-			<div class="col-md-10">
+			<div class="col-md-10 col-lg-8">
 				<article class="post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
 					<h1 class="blog-post-title article-h1">{{ post.title }}</h1>
 					<p class="blog-post-meta blog-author">
@@ -25,7 +25,8 @@
 
 					<section class="article-content">
 						<div class="row mt-3">
-							<div class="col-md-8">
+							{# <div class="col-md-8"> #}
+							<div class="col">
 								<div class="article-body rte">
 									{{post.content}}
 								</div>
