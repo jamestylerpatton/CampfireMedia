@@ -1,11 +1,19 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    {% if title %}<h1 class="h2">{{title}}</h1>{% endif %}
+    <div class="content-wrapper pt-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if title %}<h1 class="h2">{{title}}</h1>{% endif %}
 
-    {% for post in posts %}
-        {% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
-    {% endfor %}
-    
-    {% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 1, end_size: 1}) } %}
+                <div class="row">
+                    {% for post in posts %}
+                        {% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
+                    {% endfor %}
+                </div>
+
+                {% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 1, end_size: 1}) } %}
+            </div>
+        </div>
+    </div><!-- /content-wrapper -->
 {% endblock %}
