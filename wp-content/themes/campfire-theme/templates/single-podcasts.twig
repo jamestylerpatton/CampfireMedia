@@ -70,12 +70,20 @@
                 </div>
 
                 {% if hosts %}
-                <div class="authors">
-                    <h3>{{ hosts|length > 1 ? 'Hosts' : 'Host'}}</h3>
+                <div class="authors mt-4">
+                    <h3 class="h4">Hosted By</h3>
                     {% for host in hosts %}
                         {% set podcastHost = TimberUser(host) %}
-                        <div class="author-item">
-                            {{ podcastHost.name }}
+                        <div class="author-item" data-placement="bottom" data-toggle="tooltip" data-html="true" title="{{ podcastHost.description ? '<strong>'~podcastHost.name~'</strong><br>'~podcastHost.description : podcastHost.name }}">
+                            {% if podcastHost.get_field('host_avatar') %}
+                                <img src="{{ TimberImage(podcastHost.get_field('host_avatar')).src('thumbnail') }}" alt="{{ podcastHost.name }}">
+                            {% else %}
+                                <img src="{{ podcastHost.avatar }}" alt="{{ podcastHost.name }}">
+                            {% endif %}
+                            {# <div class="host-info">
+                                <div class="host-name">{{ podcastHost.name }}</div>
+                                <div class="host-description">{{ podcastHost.description }}</div>
+                            </div> #}
                         </div>
                     {% endfor %}
                 </div>

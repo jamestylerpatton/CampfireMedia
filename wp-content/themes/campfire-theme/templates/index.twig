@@ -6,7 +6,9 @@
             <div class="banner-carousel owl-carousel owl-theme">
                 {% for banner in post.get_field('banner') %}
                     <a class="item" href="{{ banner.banner_link }}">
-                        <img src="{{ TimberImage(banner.desktop_banner_image).src }}" alt="Big banner go here">
+                        <img class="d-none d-md-block" src="{{ TimberImage(banner.desktop_banner_image).src }}">
+                        <img class="d-none d-sm-block d-md-none" src="{{ TimberImage(banner.desktop_banner_image).src|resize(800, 300) }}">
+                        <img class="d-block d-sm-none" src="{{ TimberImage(banner.desktop_banner_image).src|resize(800, 600) }}">
                     </a>
                 {% endfor %}
             </div>

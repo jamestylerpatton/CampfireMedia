@@ -55,3 +55,24 @@
         }
     }
 }
+
+.authors{
+    h3{
+        text-transform: none;
+    }
+    .author-item{
+        margin-bottom: 1.2rem;
+        display: inline-block;
+        margin-right: 1rem;
+        img{
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+        // .host-info{
+        //     display: inline-block;
+        //     background: $secondary;
+        //     color: $white;
+        // }
+    }
+}

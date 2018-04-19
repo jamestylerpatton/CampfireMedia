@@ -20,6 +20,10 @@ const app = new Vue({
             let $target = $(event.target).find('.form-fields');
             $target.hide();
         }, false );
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
     }
 });
 
