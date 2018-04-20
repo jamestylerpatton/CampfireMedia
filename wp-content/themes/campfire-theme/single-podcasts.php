@@ -13,6 +13,13 @@ $context = Timber::get_context();
 $post = Timber::query_post();
 $context['post'] = $post;
 
+if (get_field('apple_podcasts', $post->ID)) {
+    preg_match('/id([0-9]+)\??/', get_field('apple_podcasts', $post->ID), $matches);
+    if (isset($matches[1])) {
+        $context['podcast_id'] = $matches[1];
+    }
+}
+
 $args = array(
     'post_type' => 'episodes',
     'posts_per_page' => 3,

@@ -15,6 +15,13 @@ $context['post'] = $post;
 
 $episodePodcast = new Timber\Post($post->get_field('podcast'));
 
+if (get_field('apple_podcasts', $episodePodcast->ID)) {
+    preg_match('/id([0-9]+)\??/', get_field('apple_podcasts', $episodePodcast->ID), $matches);
+    if (isset($matches[1])) {
+        $context['podcast_id'] = $matches[1];
+    }
+}
+
 $userArgs = array(
     'meta_query' => array(
         'relation' => 'OR',
