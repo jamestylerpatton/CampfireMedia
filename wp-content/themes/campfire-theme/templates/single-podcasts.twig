@@ -24,9 +24,9 @@
         </div>
 
         <div class="banner-socials container">
-            <nav class="text-right social-links">
+            <nav class="text-right social-links mb-2">
                 {% if post.apple_podcasts %}
-                <a target="_blank" href="{{ post.apple_podcasts }}" class="d-inline-block p-2"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
+                <a target="_blank" href="{{ post.apple_podcasts }}" class="apple-podcasts-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
                 {% endif %}
                 {% if post.facebook %}
                 <a target="_blank" href="{{ post.facebook }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
