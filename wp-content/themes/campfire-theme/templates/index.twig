@@ -8,7 +8,7 @@
                     <a class="item" href="{{ banner.banner_link }}">
                         <img class="d-none d-md-block" src="{{ TimberImage(banner.desktop_banner_image).src }}">
                         <img class="d-none d-sm-block d-md-none" src="{{ TimberImage(banner.desktop_banner_image).src|resize(800, 300) }}">
-                        <img class="d-block d-sm-none" src="{{ TimberImage(banner.desktop_banner_image).src|resize(800, 600) }}">
+                        <img class="d-block d-sm-none" src="{{ TimberImage(banner.mobile_banner_image).src|resize(800, 500) }}">
                     </a>
                 {% endfor %}
             </div>
