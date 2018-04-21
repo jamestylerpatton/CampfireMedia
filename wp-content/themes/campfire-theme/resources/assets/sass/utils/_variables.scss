@@ -14,11 +14,13 @@ $body-color: $dark;
 
 // Fonts
 //
-$font-family-sans-serif: 'Titillium Web', 'Oswald', sans-serif;
+$font-family-sans-serif: 'Industry', 'Titillium Web', sans-serif;
 
 // $font-size-base: 0.94rem;
 
-$font-weight-light: 400;
+$font-weight-light: 200;
+$font-weight-book: 400;
 $font-weight-normal: 600;
 $font-weight-bold: 700;
-$font-weight-base: $font-weight-light;
+$font-weight-base: $font-weight-book;
+$headings-font-weight: 600;

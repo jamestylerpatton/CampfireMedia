@@ -1,3 +1,95 @@
 // font-family: 'Titillium Web', sans-serif;
 // font-family: 'Oswald', sans-serif;
-@import url('https://fonts.googleapis.com/css?family=Oswald:400,500,700|Titillium+Web:400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:400,600,700');
+
+@font-face {
+  font-family: 'Industry';
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Light.eot'); /* IE9 Compat Modes */
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Light.woff') format('woff'), /* Modern Browsers */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Light.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Light.svg#bd20dd7817c15453d8ce3cbc1c0815a9') format('svg'); /* Legacy iOS */
+  font-style:   normal;
+  font-weight:  200;
+}
+
+@font-face {
+  font-family: 'Industry';
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Book.eot'); /* IE9 Compat Modes */
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Book.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Book.woff') format('woff'), /* Modern Browsers */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Book.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Book.svg#c7d0e2ba3b85111febe4fc506b4c9654') format('svg'); /* Legacy iOS */
+  font-style:   normal;
+  font-weight:  400;
+}
+
+@font-face {
+  font-family: 'Industry';
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Medium.eot'); /* IE9 Compat Modes */
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Medium.woff') format('woff'), /* Modern Browsers */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Medium.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Medium.svg#beb3f8de13fbfc29461795a9aad784ba') format('svg'); /* Legacy iOS */
+  font-style:   normal;
+  font-weight:  600;
+}
+
+@font-face {
+  font-family: 'Industry';
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Bold.eot'); /* IE9 Compat Modes */
+  src: url('/wp-content/themes/campfire-theme/fonts/Industry Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Bold.woff') format('woff'), /* Modern Browsers */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('/wp-content/themes/campfire-theme/fonts/Industry Bold.svg#5ab3e9e340e8dca440b8f3e3792292da') format('svg'); /* Legacy iOS */
+  font-style:   normal;
+  font-weight:  700;
+}
+
+// @font-face {
+//   font-family: 'Industry Thin';
+//   src: url('Industry Thin.eot'); /* IE9 Compat Modes */
+//   src: url('Industry Thin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('Industry Thin.woff') format('woff'), /* Modern Browsers */
+//        url('Industry Thin.ttf')  format('truetype'), /* Safari, Android, iOS */
+//        url('Industry Thin.svg#7c3a361d084c6f179417b662b7b6bd7e') format('svg'); /* Legacy iOS */
+       
+//   font-style:   normal;
+//   font-weight:  200;
+// }
+
+// @font-face {
+//   font-family: 'Industry Medium';
+//   src: url('Industry Medium.eot'); /* IE9 Compat Modes */
+//   src: url('Industry Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('Industry Medium.woff') format('woff'), /* Modern Browsers */
+//        url('Industry Medium.ttf')  format('truetype'), /* Safari, Android, iOS */
+//        url('Industry Medium.svg#beb3f8de13fbfc29461795a9aad784ba') format('svg'); /* Legacy iOS */
+       
+//   font-style:   normal;
+//   font-weight:  400;
+// }
+
+// @font-face {
+//   font-family: 'Industry';
+//   src: url('Industry Bold.eot'); /* IE9 Compat Modes */
+//   src: url('Industry Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('Industry Bold.woff') format('woff'), /* Modern Browsers */
+//        url('Industry Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+//        url('Industry Bold.svg#5ab3e9e340e8dca440b8f3e3792292da') format('svg'); /* Legacy iOS */
+       
+//   font-style:   normal;
+//   font-weight:  700;
+// }
+
+// @font-face {
+//   font-family: 'Industry Book';
+//   src: url('Industry Book.eot'); /* IE9 Compat Modes */
+//   src: url('Industry Book.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+//        url('Industry Book.woff') format('woff'), /* Modern Browsers */
+//        url('Industry Book.ttf')  format('truetype'), /* Safari, Android, iOS */
+//        url('Industry Book.svg#c7d0e2ba3b85111febe4fc506b4c9654') format('svg'); /* Legacy iOS */
+       
+//   font-style:   normal;
+//   font-weight:  400;
+// }

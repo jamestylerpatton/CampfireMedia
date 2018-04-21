@@ -106,6 +106,16 @@
 					timeAndDurationSeparator: ' / ',
 				});
 			});
+
+			$(function() {
+			    $('.episode-container').infiniteScroll({
+			        path: '.pagination li.next a',
+			        append: '.episode-item',
+			        history: false,
+			        button: '.view-more-button',
+			        scrollThreshold: false,
+			    });
+			})
 		})(jQuery);
 		</script>
 
