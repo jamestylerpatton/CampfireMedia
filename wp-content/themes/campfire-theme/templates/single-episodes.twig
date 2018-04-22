@@ -35,7 +35,7 @@
                             {% set banner = TimberImage(podcast.get_field('banner_image')) %}
                             <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
                         {% else %}
-                            <img src="{{ episode.thumbnail.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                            <img src="{{ podcast.thumbnail.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
                         {% endif %}
 
                         {# <img src="{{ post.thumbnail.src|resize(1200, 300) }}"> #}
