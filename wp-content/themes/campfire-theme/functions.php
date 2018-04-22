@@ -1,14 +1,4 @@
 <?php
-
-if (
-	(!in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php', 'wp-cron.php')) &&
-	$GLOBALS['_SERVER']['REQUEST_URI'] !== '/wp-admin/')
-	&& !is_user_logged_in()
-) {
-	wp_redirect('/splash', 302);
-	exit;
-}
-
 /**
  *	TODO
  * 
