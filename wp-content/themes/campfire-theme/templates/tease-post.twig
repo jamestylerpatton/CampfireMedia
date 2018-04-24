@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="mb-5">
         {% if post.get_thumbnail %}
-             <a class="item-img" href="{{post.link}}">
+             <a class="item-img d-block mb-4" href="{{post.link}}">
                  <img src="{{post.thumbnail.src}}" />
              </a>
          {% endif %}
