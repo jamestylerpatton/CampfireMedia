@@ -1,0 +1,16 @@
+.blog-post-module{
+    color: $dark;
+    h3{
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
+        a{
+            color: $secondary;
+        }
+    }
+    .date{
+        font-size: .88rem;
+    }
+    .blog-post-meta{
+        margin-bottom: 0.5rem;
+    }
+}

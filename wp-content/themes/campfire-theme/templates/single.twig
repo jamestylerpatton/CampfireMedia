@@ -11,18 +11,25 @@
 			</div>
 		{% endif %}
 
-		<div class="row justify-content-center mb-5 mt-5">
-			<div class="col-md-10 col-lg-8">
-				<article class="post-type-{{ post.post_type }}" id="post-{{ post.ID }}">
+		<article class="post-type-{{ post.post_type }} mb-5 mt-5" id="post-{{ post.ID }}">
+			<div class="row justify-content-center">
+				<div class="col-md-10 col-lg-8 mb-2">
 					<h1 class="blog-post-title article-h1">{{ post.title }}</h1>
 					<p class="blog-post-meta blog-author">
 						<span class="date">{{ post.date }}</span> by {{ post.author.name }}
 					</p>
 
+				</div>
+			</div>
+			<div class="row justify-content-center mb-2">
+				<div class="col-md-12">
 					<div class="post-image">
-						<img src="{{ post.thumbnail.src|resize(1200, 300) }}">
+						<img src="{{ post.thumbnail.src|resize(1200, 630) }}">
 					</div>
-
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-10 col-lg-8">
 					<section class="article-content">
 						<div class="row mt-3">
 							{# <div class="col-md-8"> #}
@@ -34,8 +41,8 @@
 							{# ads will go here #}
 						</div>
 					</section>
-				</article>
+				</div>
 			</div>
-		</div>
+		</article>
 	</div><!-- /content-wrapper -->
 {% endblock %}

@@ -20,6 +20,7 @@ if (get_field('apple_podcasts', $post->ID)) {
     }
 }
 
+// EXPOSE EPISODES
 $args = array(
     'post_type' => 'episodes',
     'posts_per_page' => 3,
@@ -32,6 +33,21 @@ $args = array(
 );
 $context['episodes'] = new Timber\PostQuery($args);
 
+// EXPOSE BLOG POSTS
+$args = array(
+    'post_type' => 'post',
+    'posts_per_page' => 4,
+    'meta_query' => array(
+        array(
+            'key' => 'podcast',
+            'value' => $post->id
+        )
+    )
+);
+$context['blog'] = new Timber\PostQuery($args);
+// dd($context['blog']);
+
+// EXPOSE HOSTS
 $userArgs = array(
     'meta_query' => array(
         'relation' => 'OR',

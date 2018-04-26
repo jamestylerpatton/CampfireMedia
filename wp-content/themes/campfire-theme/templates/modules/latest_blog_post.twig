@@ -1,3 +1,21 @@
 <div class="podcast-module blog-post-module mb-4">
-    blog post will go here
+    {% set blog_post = blog[0] %}
+    {% if blog_post %}
+        <article>
+            <div class="item-description-block">
+                {% if blog_post.get_thumbnail %}
+                    <a class="item-img d-block mb-2" href="{{blog_post.link}}">
+                        <img src="{{blog_post.thumbnail.src}}" />
+                    </a>
+                {% endif %}
+                <h3 class="h4 item-title"><a href="{{blog_post.link}}">{{blog_post.title}}</a></h3>
+                <p class="blog-post-meta blog-author">
+                    <span class="date">{{ blog_post.date }}</span>
+                </p>
+                <p class="short-description">{{blog_post.preview.length(25)}}</p>
+            </div>
+        </article>
+    {% else %}
+        {# Show nothing #}
+    {% endif %}
 </div>

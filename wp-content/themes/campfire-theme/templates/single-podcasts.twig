@@ -45,7 +45,7 @@
 {% block content %}
     <section class="podcast-content mb-5">
 
-        <div class="row mb-2">
+        <div class="row mb-4">
             <div class="col text-uppercase">
                 <div class="breadcrumbs">
                     <a href="/">HOME</a> /
@@ -56,7 +56,7 @@
         </div>
 
         <div class="row">
-            <div class="mb-4 {{ post.get_field('modules') ? 'col-lg-3 col-sm-6' : 'col-lg-6' }}">
+            <div class="mb-5 {{ post.get_field('modules') ? 'col-lg-3 col-sm-6' : 'col-lg-6' }}">
                 <div class="rss-link mb-1">
                     <a target="_blank" href="{{post.rss_feed_url}}">
                         <i class="fas fa-rss"></i>
@@ -91,7 +91,7 @@
             </div>
 
             {% if post.get_field('modules') %}
-                <div class="mb-4 col-lg-3 col-sm-6">
+                <div class="mb-5 col-lg-3 col-sm-6">
                     {% for module in post.get_field('modules') %}
                         {% include 'modules/' ~ module.acf_fc_layout ~ '.twig' %}
                     {% endfor %}
