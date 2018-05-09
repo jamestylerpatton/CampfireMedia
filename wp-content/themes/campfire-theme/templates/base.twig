@@ -39,7 +39,11 @@
 									<h1 class="hdr-logo" role="banner">
 										<a title="{{ site.name }}" class="hdr-logo-link" href="{{site.url}}" rel="home">
 											<span class="sr-only">{{site.name}}</span>
-											<img src="{{ site.theme.link }}/resources/images/campfire-logo.png" alt="{{ site.name }}">
+											{% if options.header_logo %}
+												<img src="{{ options.header_logo.url }}" alt="{{ site.name }}">
+											{% else %}
+												<img src="{{ site.theme.link }}/resources/images/campfire-logo.png" alt="{{ site.name }}">
+											{% endif %}
 										</a>
 									</h1>
 								</div>
@@ -57,12 +61,16 @@
 											</li>
 										</ul>
 										<ul class="nav socials">
-											<li class="nav-item">
-												<a target="_blank" href="https://www.facebook.com/WeAreCampfire" class="nav-link"><i class="fab fa-facebook-f"></i></a>
-											</li>
-											<li class="nav-item">
-												<a target="_blank" href="https://twitter.com/WeAre_Campfire" class="nav-link"><i class="fab fa-twitter"></i></a>
-											</li>
+											{% if options.facebook_url %}
+											    <li class="nav-item">
+											    	<a target="_blank" href="{{ options.facebook_url }}" class="nav-link"><i class="fab fa-facebook-f"></i></a>
+											    </li>
+											{% endif %}
+											{% if options.twitter_url %}
+												<li class="nav-item">
+													<a target="_blank" href="{{ options.twitter_url }}" class="nav-link"><i class="fab fa-twitter"></i></a>
+												</li>
+											{% endif %}
 										</ul>
 									</nav>
 								</div>

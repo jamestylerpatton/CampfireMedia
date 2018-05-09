@@ -55,6 +55,20 @@
                                 </div>
                             </section>
                         </div>
+                        {# COMMENTING FOR POSSIBLE USE LATER #}
+                        {# <div class="col-md-4">
+                            <div class="featured-podcasts">
+                                <h4 class="h5">Featured Shows</h4>
+                                {% set homepage = TimberPost(71) %}
+                                {% for podcast in homepage.get_field('featured_podcasts') %}
+                                    <div class="item">
+                                        <a href="{{ podcast.link }}" class="item-img">
+                                            <img src="{{ podcast.thumbnail.src('featured_square') }}" alt="{{ podcast.title }} Image">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div> #}
                     </div>
 
                 </article>
