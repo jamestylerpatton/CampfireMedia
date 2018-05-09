@@ -28,14 +28,14 @@
 
                     <div class="audio-player-container mb-4">
 
-                        {% if episode.get_field('banner_image_optional') %}
-                            {% set banner = TimberImage(episode.get_field('banner_image_optional')) %}
-                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                        {% if post.get_field('banner_image_optional') %}
+                            {% set banner = TimberImage(post.get_field('banner_image_optional')) %}
+                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ post.title }} Banner">
                         {% elseif podcast.get_field('banner_image') %}
                             {% set banner = TimberImage(podcast.get_field('banner_image')) %}
-                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                            <img src="{{ banner.src|resize(1200, 300) }}" alt="{{ post.title }} Banner">
                         {% else %}
-                            <img src="{{ podcast.thumbnail.src|resize(1200, 300) }}" alt="{{ episode.title }} Banner">
+                            <img src="{{ podcast.thumbnail.src|resize(1200, 300) }}" alt="{{ post.title }} Banner">
                         {% endif %}
 
                         {# <img src="{{ post.thumbnail.src|resize(1200, 300) }}"> #}
@@ -49,7 +49,7 @@
                     <div class="row mt-3">
                         <div class="col-md-8">
                             <section class="article-content">
-                                <div class="date text-right">{{ episode.post_date|date('M j, Y') }}</div>
+                                <div class="date text-right">{{ post.date('M j, Y') }}</div>
                                 <div class="article-body">
                                     {{post.content}}
                                 </div>
