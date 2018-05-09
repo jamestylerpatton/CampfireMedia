@@ -14,7 +14,7 @@ class Podcasts
         add_action('import_rss_feed', array($this, 'import_episodes_cron'));
 
         if ( ! wp_next_scheduled( 'import_rss_feed' ) ) {
-            wp_schedule_event( time(), 'twicedaily', 'import_rss_feed' );
+            wp_schedule_event( time(), 'hourly', 'import_rss_feed' );
         }
 
         add_action('save_post', array($this, 'import_new_podcast_posts'), 10, 2);
