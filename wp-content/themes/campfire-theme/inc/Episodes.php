@@ -34,7 +34,7 @@ class Episodes
                 'edit_post' => 'Edit Episode',
                 'edit_posts' => 'Edit Episodes',
                 'edit_others_posts' => 'Edit Other Episodes',
-                'publish_posts' => 'Publist Episodes',
+                'publish_posts' => 'Publish Episodes',
                 'read_post' => 'Read Episode',
                 'read_private_posts' => 'Read Private Episodes',
                 'delete_post' => 'Delete Episode',
