@@ -31,10 +31,16 @@ class Episodes
                 'title', 'editor', 'author', 'thumbnail'
             ),
             'capabilities' => array(
-                'edit_post' => 'edit_posts',
-                'read_post' => 'read_posts',
-                'delete_posts' => 'delete_posts'
+                'edit_post' => 'Edit Episode',
+                'edit_posts' => 'Edit Episodes',
+                'edit_others_posts' => 'Edit Other Episodes',
+                'publish_posts' => 'Publist Episodes',
+                'read_post' => 'Read Episode',
+                'read_private_posts' => 'Read Private Episodes',
+                'delete_post' => 'Delete Episode',
+                'delete_posts' => 'Delete Episodes',
             ),
+            'map_meta_cap' => true,
             'public' => true,
             'show_in_menu' => true,
             'menu_position' => 5,
