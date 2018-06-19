@@ -93,7 +93,7 @@ abstract class WPSEO_Abstract_Post_Filter implements WPSEO_WordPress_Integration
 	 *
 	 * @return array Array of views including the added view.
 	 */
-	public function add_filter_link( array $views ) {
+	public function add_filter_link( $views ) {
 		$views[ 'yoast_' . $this->get_query_val() ] = sprintf(
 			'<a href="%1$s"%2$s>%3$s</a> (%4$s)',
 			esc_url( $this->get_filter_url() ),

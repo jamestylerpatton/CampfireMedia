@@ -8,7 +8,7 @@ class Episodes
     {
         $this->isAdmin = current_user_can( 'edit_dashboard' );
 
-        add_action('init', array($this,'create_post_type'));
+        add_action('init', array($this, 'create_post_type'));
         add_filter('pre_get_posts', array($this, 'restrict_user_episodes'));
         add_filter('pre_get_posts', array($this, 'episode_archive_args'));
         add_filter('views_edit-episodes' , array($this, 'update_episodes_view_count'), 10, 1);
@@ -29,6 +29,11 @@ class Episodes
             ),
             'supports' => array(
                 'title', 'editor', 'author', 'thumbnail'
+            ),
+            'capabilities' => array(
+                'edit_post' => 'edit_posts',
+                'read_post' => 'read_posts',
+                'delete_posts' => 'delete_posts'
             ),
             'public' => true,
             'show_in_menu' => true,
