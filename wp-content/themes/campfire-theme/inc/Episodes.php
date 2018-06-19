@@ -68,6 +68,12 @@ class Episodes
         global $user_ID;
 
         $podcasts = get_field('podcast', 'user_'.$user_ID);
+
+        if (!$podcasts) {
+            $query->set('post__in', [0]);
+            return $query;
+        }
+
         $podcastIds = [];
         foreach ($podcasts as $podcastItem) {
             $podcastIds[] = $podcastItem->ID;
