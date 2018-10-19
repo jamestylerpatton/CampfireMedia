@@ -74,7 +74,13 @@
                     <h3 class="h4">Hosted By</h3>
                     {% for host in hosts %}
                         {% set podcastHost = TimberUser(host) %}
-                        <div class="author-item" data-placement="bottom" data-toggle="tooltip" data-html="true" title="{{ podcastHost.description ? '<strong>'~podcastHost.name~'</strong><br>'~podcastHost.description : podcastHost.name }}">
+                        {# {% if podcastHost.description %}
+                            {% set hostTitle = '<strong>' ~ podcastHost.name ~ '</strong><br>' ~ podcastHost.description|escape %}
+                        {% else %}
+                            {% set hostTitle = podcastHost.name %}
+                        {% endif %} #}
+                        {% set hostTitle = podcastHost.name %}
+                        <div class="author-item" data-placement="bottom" data-toggle="tooltip" data-html="true" title="{{ hostTitle }}">
                             {% if podcastHost.get_field('host_avatar') %}
                                 <img src="{{ TimberImage(podcastHost.get_field('host_avatar')).src('thumbnail') }}" alt="{{ podcastHost.name }}">
                             {% else %}
@@ -97,7 +103,7 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            
+
             <div class="mb-4 col-lg-6">
                 <div class="episode-list">
                     {% for episode in episodes %}
