@@ -20,6 +20,7 @@ class Podcasts
         add_action('save_post', array($this, 'import_new_podcast_posts'), 10, 2);
 
         add_action('trashed_post', array($this, 'delete_podcast_posts'), 10);
+        add_action('untrashed_post', array($this, 'import_trashed_podcast_posts'));
 
         add_filter('manage_podcasts_posts_columns', array($this, 'podcast_author_head'));
         add_action('manage_podcasts_posts_custom_column', array($this, 'podcast_author_content'), 10, 2);
@@ -148,6 +149,15 @@ class Podcasts
         foreach ($posts_array as $episode_post) {
             wp_delete_post($episode_post->ID);
         }
+    }
+
+    /**
+     * Import RSS feed from trashed podcasts
+     */
+    function import_trashed_podcast_posts($post_id) {
+        $post = get_post($post_id);
+        delete_post_meta($post_id, 'rss_updated');
+        $this->import_episodes($post);
     }
 
     function import_episodes($podcast)
