@@ -19,6 +19,8 @@ class Podcasts
 
         add_action('save_post', array($this, 'import_new_podcast_posts'), 10, 2);
 
+        add_action('trashed_post', array($this, 'delete_podcast_posts'), 10);
+
         add_filter('manage_podcasts_posts_columns', array($this, 'podcast_author_head'));
         add_action('manage_podcasts_posts_custom_column', array($this, 'podcast_author_content'), 10, 2);
     }
@@ -47,14 +49,14 @@ class Podcasts
      */
     function restrict_user_podcasts($query) {
         global $pagenow;
-     
+
         if ('edit.php' != $pagenow ||
             !$query->is_admin ||
             $this->isAdmin ||
             $query->query_vars['post_type'] !== 'podcasts') {
             return $query;
         }
-     
+
         global $user_ID;
 
         $podcast = get_field('podcast', 'user_'.$user_ID);
@@ -81,7 +83,7 @@ class Podcasts
      */
     function podcast_archive_args($query) {
         global $pagenow;
-        
+
         if (is_archive() &&
             !is_admin() &&
             $query->query_vars['post_type'] === 'podcasts') {
@@ -133,6 +135,21 @@ class Podcasts
         }
     }
 
+    function delete_podcast_posts($post_id)
+    {
+        global $post_type;
+        if ( $post_type != 'podcasts' ) return;
+        $args = [
+            'post_type' => 'episodes',
+            'meta_key'     => 'podcast',
+            'meta_value'   => $post_id,
+        ];
+        $posts_array = get_posts( $args );
+        foreach ($posts_array as $episode_post) {
+            wp_delete_post($episode_post->ID);
+        }
+    }
+
     function import_episodes($podcast)
     {
         $post_updated = get_post_meta($podcast->ID, 'rss_updated', true);
@@ -164,7 +181,8 @@ class Podcasts
             }
 
             $title = (string) $episode->title;
-            $content = (string) $episode->children('content', true)->encoded;
+            // $content = (string) $episode->children('content', true)->encoded;
+            $content = (string) $episode->description;
             $summary = (string) $episode->children('itunes', true)->summary;
 
             $rss_link = (string) $episode->link;
