@@ -144,6 +144,7 @@ class Podcasts
             'post_type' => 'episodes',
             'meta_key'     => 'podcast',
             'meta_value'   => $post_id,
+            'posts_per_page' => -1
         ];
         $posts_array = get_posts( $args );
         foreach ($posts_array as $episode_post) {
