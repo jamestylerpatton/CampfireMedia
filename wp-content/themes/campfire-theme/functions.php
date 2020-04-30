@@ -1,28 +1,28 @@
 <?php
 /**
  *	TODO
- * 
+ *
  *	Users -> belongsToPodcast
  *	Podcasts -> hasManyUsers, hasManyEpisodes, has archive
- *	Episodes -> belongsToPodcast, has archive 
+ *	Episodes -> belongsToPodcast, has archive
  *	Posts -> belongsToPodcast?, has archive
  *
  *	User should be able to check what podcast they're associated with
  *	Any episode posted from the user should be associated with their podcast
- *	
+ *
  *	http://www.wpbeginner.com/plugins/how-to-limit-authors-to-their-own-posts-in-wordpress-admin/
- * 
+ *
  */
 
 if ( ! class_exists( 'Timber' ) ) {
 	add_action( 'admin_notices', function() {
 		echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php') ) . '</a></p></div>';
 	});
-	
+
 	add_filter('template_include', function($template) {
 		return get_stylesheet_directory() . '/static/no-timber.html';
 	});
-	
+
 	return;
 }
 
@@ -97,6 +97,8 @@ class StarterSite extends TimberSite {
 
 		// wp_enqueue_style('mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.8/mediaelementplayer.min.css');
 		wp_enqueue_style('wp-mediaelement');
+
+		wp_enqueue_style( 'app', get_template_directory_uri() . '/css/app.css',false,'1.1','all');
 	}
 
 	function load_scripts() {
@@ -110,7 +112,7 @@ class StarterSite extends TimberSite {
 new StarterSite();
 
 /**
- * TODO: Hide episode and podcast admin post pages from other 
+ * TODO: Hide episode and podcast admin post pages from other
  * 		 unauthorized editors
  */
 require get_template_directory() . '/inc/ImageUpload.php';

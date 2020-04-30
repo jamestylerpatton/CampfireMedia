@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--><html class="no-js" {{ site.language_attributes }}> <!--<![endif]-->
 <head>
     <meta charset="{{ site.charset }}" />
-        <title>   
+        <title>
             {% if wp_title %}
                 {{ wp_title }} - {{ site.name }}
             {% else %}
@@ -18,7 +18,7 @@
 
     <link href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ site.theme.link }}/css/app.css">
+    {# <link rel="stylesheet" href="{{ site.theme.link }}/css/app.css"> #}
 
     {% if podcast_id %}
     <meta name="apple-itunes-app" content="app-id={{ podcast_id }}">
