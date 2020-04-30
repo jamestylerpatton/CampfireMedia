@@ -8,10 +8,16 @@
     }
     .item{
         border: 2px solid darken($white, 6%);
-        display: block;
         max-width: 100%;
         margin: 0 15px;
         border-radius: 5px;
+        display: none;
+        &:first-child{
+            display: block;
+        }
+    }
+    &.owl-loaded .item{
+        display: block;
     }
     .banner-carousel{
         padding: 0 50px;
