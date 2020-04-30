@@ -30,6 +30,14 @@
  *     @type int    $spam         Whether the site is spam. Default 0.
  *     @type int    $deleted      Whether the site is deleted. Default 0.
  *     @type int    $lang_id      The site's language ID. Currently unused. Default 0.
+ *     @type int    $user_id      User ID for the site administrator. Passed to the
+ *                                `wp_initialize_site` hook.
+ *     @type string $title        Site title. Default is 'Site %d' where %d is the site ID. Passed
+ *                                to the `wp_initialize_site` hook.
+ *     @type array  $options      Custom option $key => $value pairs to use. Default empty array. Passed
+ *                                to the `wp_initialize_site` hook.
+ *     @type array  $meta         Custom site metadata $key => $value pairs to use. Default empty array.
+ *                                Passed to the `wp_initialize_site` hook.
  * }
  * @return int|WP_Error The new site's ID on success, or error object on failure.
  */
@@ -52,24 +60,22 @@ function wp_insert_site( array $data ) {
 		'lang_id'      => 0,
 	);
 
-	// Extract the passed arguments that may be relevant for site initialization.
-	$args = array_diff_key( $data, $defaults );
-	if ( isset( $args['site_id'] ) ) {
-		unset( $args['site_id'] );
+	$prepared_data = wp_prepare_site_data( $data, $defaults );
+	if ( is_wp_error( $prepared_data ) ) {
+		return $prepared_data;
 	}
 
-	$data = wp_prepare_site_data( $data, $defaults );
-	if ( is_wp_error( $data ) ) {
-		return $data;
-	}
-
-	if ( false === $wpdb->insert( $wpdb->blogs, $data ) ) {
+	if ( false === $wpdb->insert( $wpdb->blogs, $prepared_data ) ) {
 		return new WP_Error( 'db_insert_error', __( 'Could not insert site into the database.' ), $wpdb->last_error );
 	}
 
+	clean_blog_cache( $wpdb->insert_id );
+
 	$new_site = get_site( $wpdb->insert_id );
 
-	clean_blog_cache( $new_site );
+	if ( ! $new_site ) {
+		return new WP_Error( 'get_site_error', __( 'Could not retrieve site data.' ) );
+	}
 
 	/**
 	 * Fires once a site has been inserted into the database.
@@ -79,6 +85,12 @@ function wp_insert_site( array $data ) {
 	 * @param WP_Site $new_site New site object.
 	 */
 	do_action( 'wp_insert_site', $new_site );
+
+	// Extract the passed arguments that may be relevant for site initialization.
+	$args = array_diff_key( $data, $defaults );
+	if ( isset( $args['site_id'] ) ) {
+		unset( $args['site_id'] );
+	}
 
 	/**
 	 * Fires when a site's initialization routine should be executed.
@@ -95,11 +107,21 @@ function wp_insert_site( array $data ) {
 		$user_id = ! empty( $args['user_id'] ) ? $args['user_id'] : 0;
 		$meta    = ! empty( $args['options'] ) ? $args['options'] : array();
 
+		// WPLANG was passed with `$meta` to the `wpmu_new_blog` hook prior to 5.1.0.
+		if ( ! array_key_exists( 'WPLANG', $meta ) ) {
+			$meta['WPLANG'] = get_network_option( $new_site->network_id, 'WPLANG' );
+		}
+
+		// Rebuild the data expected by the `wpmu_new_blog` hook prior to 5.1.0 using whitelisted keys.
+		// The `$site_data_whitelist` matches the one used in `wpmu_create_blog()`.
+		$site_data_whitelist = array( 'public', 'archived', 'mature', 'spam', 'deleted', 'lang_id' );
+		$meta                = array_merge( array_intersect_key( $data, array_flip( $site_data_whitelist ) ), $meta );
+
 		/**
 		 * Fires immediately after a new site is created.
 		 *
 		 * @since MU (3.0.0)
-		 * @deprecated 5.1.0 Use wp_insert_site
+		 * @deprecated 5.1.0 Use {@see 'wp_insert_site'} instead.
 		 *
 		 * @param int    $site_id    Site ID.
 		 * @param int    $user_id    User ID.
@@ -366,6 +388,10 @@ function update_site_cache( $sites, $update_meta_cache = true ) {
  * @return array|false Returns false if there is nothing to update. Returns an array of metadata on success.
  */
 function update_sitemeta_cache( $site_ids ) {
+	// Ensure this filter is hooked in even if the function is called early.
+	if ( ! has_filter( 'update_blog_metadata_cache', 'wp_check_site_meta_support_prefilter' ) ) {
+		add_filter( 'update_blog_metadata_cache', 'wp_check_site_meta_support_prefilter' );
+	}
 	return update_meta_cache( 'blog', $site_ids );
 }
 
@@ -662,7 +688,7 @@ function wp_initialize_site( $site_id, array $args = array() ) {
 		$args,
 		array(
 			'user_id' => 0,
-			/* translators: %d: site ID */
+			/* translators: %d: Site ID. */
 			'title'   => sprintf( __( 'Site %d' ), $site->id ),
 			'options' => array(),
 			'meta'    => array(),
@@ -691,7 +717,7 @@ function wp_initialize_site( $site_id, array $args = array() ) {
 		switch_to_blog( $site->id );
 	}
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 	// Set up the database tables.
 	make_db_current_silent( 'blog' );
@@ -735,8 +761,8 @@ function wp_initialize_site( $site_id, array $args = array() ) {
 
 	// Remove all permissions that may exist for the site.
 	$table_prefix = $wpdb->get_blog_prefix();
-	delete_metadata( 'user', 0, $table_prefix . 'user_level', null, true ); // delete all
-	delete_metadata( 'user', 0, $table_prefix . 'capabilities', null, true ); // delete all
+	delete_metadata( 'user', 0, $table_prefix . 'user_level', null, true );   // Delete all.
+	delete_metadata( 'user', 0, $table_prefix . 'capabilities', null, true ); // Delete all.
 
 	// Install default site content.
 	wp_install_defaults( $args['user_id'] );
@@ -837,7 +863,7 @@ function wp_uninitialize_site( $site_id ) {
 	$index   = 0;
 
 	while ( $index < count( $stack ) ) {
-		// Get indexed directory from stack
+		// Get indexed directory from stack.
 		$dir = $stack[ $index ];
 
 		// phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
@@ -863,7 +889,7 @@ function wp_uninitialize_site( $site_id ) {
 		$index++;
 	}
 
-	$stack = array_reverse( $stack ); // Last added dirs are deepest
+	$stack = array_reverse( $stack ); // Last added directories are deepest.
 	foreach ( (array) $stack as $dir ) {
 		if ( $dir != $top_dir ) {
 			@rmdir( $dir );
@@ -906,7 +932,8 @@ function wp_is_site_initialized( $site_id ) {
 	 *
 	 * @since 5.1.0
 	 *
-	 * @param bool|null $pre     The value to return, if not null.
+	 * @param bool|null $pre     The value to return instead. Default null
+	 *                           to continue with the check.
 	 * @param int       $site_id The site ID that is being checked.
 	 */
 	$pre = apply_filters( 'pre_wp_is_site_initialized', null, $site_id );
@@ -979,8 +1006,6 @@ function clean_blog_cache( $blog ) {
 	wp_cache_delete( $blog_id . 'short', 'blog-details' );
 	wp_cache_delete( $domain_path_key, 'blog-lookup' );
 	wp_cache_delete( $domain_path_key, 'blog-id-cache' );
-	wp_cache_delete( 'current_blog_' . $blog->domain, 'site-options' );
-	wp_cache_delete( 'current_blog_' . $blog->domain . $blog->path, 'site-options' );
 	wp_cache_delete( $blog_id, 'blog_meta' );
 
 	/**
@@ -1000,7 +1025,7 @@ function clean_blog_cache( $blog ) {
 	 * Fires after the blog details cache is cleared.
 	 *
 	 * @since 3.4.0
-	 * @deprecated 4.9.0 Use clean_site_cache
+	 * @deprecated 4.9.0 Use {@see 'clean_site_cache'} instead.
 	 *
 	 * @param int $blog_id Blog ID.
 	 */
@@ -1293,7 +1318,7 @@ function wp_cache_set_sites_last_changed() {
  */
 function wp_check_site_meta_support_prefilter( $check ) {
 	if ( ! is_site_meta_supported() ) {
-		/* translators: %s: database table name */
+		/* translators: %s: Database table name. */
 		_doing_it_wrong( __FUNCTION__, sprintf( __( 'The %s table is not installed. Please run the network database upgrade.' ), $GLOBALS['wpdb']->blogmeta ), '5.1.0' );
 		return false;
 	}

@@ -9,3 +9,4 @@ cgi-bin
 **/.sass-cache
 .ftpquota
 wp-admin/error_log
+error_log

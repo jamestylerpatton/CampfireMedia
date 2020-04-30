@@ -47,13 +47,13 @@ if ( WPSEO_Post_Type::has_archive( $wpseo_post_type ) ) {
 
 	$editor = new WPSEO_Replacevar_Editor(
 		$yform,
-		array(
+		[
 			'title'                 => 'title-ptarchive-' . $wpseo_post_type->name,
 			'description'           => 'metadesc-ptarchive-' . $wpseo_post_type->name,
 			'page_type_recommended' => $recommended_replace_vars->determine_for_archive( $wpseo_post_type->name ),
 			'page_type_specific'    => $editor_specific_replace_vars->determine_for_archive( $wpseo_post_type->name ),
 			'paper_style'           => false,
-		)
+		]
 	);
 	$editor->render();
 
@@ -65,7 +65,7 @@ if ( WPSEO_Post_Type::has_archive( $wpseo_post_type ) ) {
 }
 
 /**
- * Allow adding a custom checkboxes to the admin meta page - Post Types tab
+ * Allow adding a custom checkboxes to the admin meta page - Post Types tab.
  *
  * @api  WPSEO_Admin_Pages  $yform  The WPSEO_Admin_Pages object
  * @api  String  $name  The post type name
