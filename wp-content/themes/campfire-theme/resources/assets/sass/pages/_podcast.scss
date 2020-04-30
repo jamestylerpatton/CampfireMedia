@@ -9,9 +9,15 @@
     }
 }
 .podcast-content{
-    .rss-link{
+    .podcast-content-external-links{
+        img{
+            height: 28px;
+            display: block;
+            padding-bottom: 2px;
+        }
         a{
             font-size: 1.5em;
+            vertical-align: middle;
         }
     }
 

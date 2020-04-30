@@ -24,12 +24,17 @@
         bottom: 20px;
         font-size: 14px;
         text-transform: uppercase;
+        right: 100px;
     }
 
     &.small .audio-podcast-title{
         top: 20px;
         right: 30px;
         bottom: auto;
+    }
+
+    .mejs-container{
+        z-index: 20;
     }
 
     .mejs-container,
@@ -96,7 +101,8 @@
         .mejs-time{
             position: absolute;
             height: auto;
-            bottom: 20px;
+            // bottom: 20px;
+            bottom: 23px;
             right: 15px;
             color: $dark;
             line-height: 1rem;

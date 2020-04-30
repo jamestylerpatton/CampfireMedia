@@ -12,7 +12,8 @@ const app = new Vue({
                 loop: true,
                 nav: false,
                 dots: false,
-                autoplay: true
+                autoplay: true,
+                autoplayTimeout: 7000
             });
         });
 

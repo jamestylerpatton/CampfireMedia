@@ -25,9 +25,9 @@
 
         <div class="banner-socials container">
             <nav class="text-right social-links mb-2">
-                {% if post.apple_podcasts %}
+                {# {% if post.apple_podcasts %}
                 <a target="_blank" href="{{ post.apple_podcasts }}" class="apple-podcasts-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
-                {% endif %}
+                {% endif %} #}
                 {% if post.facebook %}
                 <a target="_blank" href="{{ post.facebook }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
                 {% endif %}
@@ -57,8 +57,18 @@
 
         <div class="row">
             <div class="mb-5 {{ post.get_field('modules') ? 'col-lg-3 col-sm-6' : 'col-lg-6' }}">
-                <div class="rss-link mb-1">
-                    <a target="_blank" href="{{post.rss_feed_url}}">
+                <div class="podcast-content-external-links mb-2">
+                    {% if post.apple_podcasts %}
+                    <a target="_blank" href="{{ post.apple_podcasts }}" class="apple-podcasts d-inline-block pr-2">
+                        <img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple">
+                    </a>
+                    {% endif %}
+                    {% if post.rss_feed_url %}
+                    <a target="_blank" href="{{post.rss_feed_url}}" class="spotify pr-2" title="Listen on Spotify">
+                        <i class="fab fa-spotify"></i>
+                    </a>
+                    {% endif %}
+                    <a target="_blank" href="{{post.rss_feed_url}}" class="rss" title="RSS">
                         <i class="fas fa-rss"></i>
                     </a>
                 </div>
