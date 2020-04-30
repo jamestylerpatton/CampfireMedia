@@ -11,6 +11,7 @@ use NestedPages\Entities\Listing\ListingRepository;
 use NestedPages\Entities\Listing\ListingQuery;
 use NestedPages\Config\SettingsRepository;
 use NestedPages\Entities\PluginIntegration\IntegrationFactory;
+use NestedPages\Entities\PostType\PostTypeCustomFields;
 
 /**
 * Primary Post Listing
@@ -88,6 +89,11 @@ class Listing
 	private $settings;
 
 	/**
+	* Custom Field Repository
+	*/
+	private $custom_fields_repo;
+
+	/**
 	* Post Type Settings
 	* @var object from post type repo
 	*/
@@ -133,6 +139,7 @@ class Listing
 		$this->listing_query = new ListingQuery;
 		$this->post_data_factory = new PostDataFactory;
 		$this->settings = new SettingsRepository;
+		$this->custom_fields_repo = new PostTypeCustomFields;
 		$this->setTaxonomies();
 		$this->setPostTypeSettings();
 		$this->setStandardFields();
@@ -213,10 +220,15 @@ class Listing
 	/**
 	* Get the Post States
 	*/
-	private function postStates()
+	private function postStates($assigned_pt)
 	{
 		$out = '';
-		$post_states = apply_filters('display_post_states', [], $this->post);
+		$post_states = [];
+		if ( !$assigned_pt ) {
+			if ( $this->post->id == get_option('page_on_front') ) $post_states['page_on_front'] = __('Front Page', 'wp-nested-pages');
+			if ( $this->post->id == get_option('page_for_posts') ) $post_states['page_for_posts'] = __('Posts Page', 'wp-nested-pages');
+		}
+		$post_states = apply_filters('display_post_states', $post_states, $this->post);
 		if ( empty($post_states) ) return $out;
 		$state_count = count($post_states);
 		$i = 0;
@@ -290,11 +302,12 @@ class Listing
 		$compared = array_intersect($this->listing_repo->visiblePages($this->post_type->name), $children);
 
 		$list_classes = 'sortable visible nplist';
-		if ( !$this->user->canSortPages() || !$sortable || $this->listing_repo->isSearch() ) $list_classes .= ' no-sort';
+		if ( !$this->user->canSortPosts($this->post_type->name) || !$sortable || $this->listing_repo->isSearch() ) $list_classes .= ' no-sort';
 		if ( $this->listing_repo->isOrdered($this->post_type->name) ) $list_classes .= ' no-sort';
 		if ( $this->integrations->plugins->wpml->installed && $this->integrations->plugins->wpml->getCurrentLanguage() == 'all' ) $list_classes .= ' no-sort';
 		if ( $this->integrations->plugins->yoast->installed ) $list_classes .= ' has-yoast';
 		if ( $this->listing_repo->isSearch() ) $list_classes .= ' np-search-results';
+		if ( $this->settings->nonIndentEnabled() ) $list_classes .= ' non-indent';
 
 		// Primary List
 		if ( $count == 0 ) {
@@ -406,14 +419,14 @@ class Listing
 
 				$row_classes = '';
 				if ( !$this->post_type->hierarchical ) $row_classes .= ' non-hierarchical';
-				if ( !$this->user->canSortPages() ) $row_classes .= ' no-sort';
+				if ( !$this->user->canSortPosts($this->post_type->name) ) $row_classes .= ' no-sort';
 				if ( $wpml_current_language == 'all' ) $row_classes .= ' no-sort';
 				if ( $this->listing_repo->isSearch() || $this->listing_repo->isOrdered($this->post_type->name) ) $row_classes .= ' search';
 				if ( $this->post->template ) $row_classes .= $template;
 
 				// Filter sortable per post
 				$filtered_sortable = apply_filters('nestedpages_post_sortable', true, $this->post, $this->post_type);
-				if ( !$filtered_sortable && $this->user->canSortPages() && $this->post_type->hierarchical && !$wpml_current_language ) $row_classes .= ' no-sort-filtered';
+				if ( !$filtered_sortable && $this->user->canSortPosts($this->post_type->name) && $this->post_type->hierarchical && !$wpml_current_language ) $row_classes .= ' no-sort-filtered';
 
 				// Page Assignment for Post Type
 				$assigned_pt = ( $this->listing_repo->isAssignedPostType($this->post->id, $this->assigned_pt_pages) ) 

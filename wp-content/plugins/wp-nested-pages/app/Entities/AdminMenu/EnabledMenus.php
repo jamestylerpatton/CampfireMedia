@@ -57,10 +57,12 @@ class EnabledMenus
 		$c = 1; // Counter for position
 		global $np_page_params;
 		foreach($this->enabled_types as $key => $type){	
+			$user_can_view = apply_filters("nestedpages_sort_view_$type->name", $this->user->canViewSorting($type->name), $this->user->getRoles());
 			if ( $type->np_enabled !== true ) continue;
+			if ( !$user_can_view ) continue;
 			if ( $type->replace_menu ) {
 				$this->post_type = get_post_type_object($key);
-				if ( (current_user_can($this->post_type->cap->edit_posts)) || ($this->user->canSortPages()) ){
+				if ( (current_user_can($this->post_type->cap->edit_posts)) ){
 					$this->addMenu($c);
 					$this->addSubmenu();
 					$this->removeExistingMenu();
@@ -128,9 +130,9 @@ class EnabledMenus
 	private function menuPosition($c)
 	{
 		global $_wp_last_object_menu;
-		if ( $this->post_type->name == 'post' ) return 5;
-		if ( $this->post_type->name == 'page') return 20;
-		if ( $this->post_type->menu_position ) return $this->post_type->menu_position + 1;
+		if ( $this->post_type->name == 'post' ) return apply_filters('nestedpages_menu_order', 5, $this->post_type);
+		if ( $this->post_type->name == 'page') return apply_filters('nestedpages_menu_order', 20, $this->post_type);
+		if ( $this->post_type->menu_position ) return apply_filters('nestedpages_menu_order', $this->post_type->menu_position + 1, $this->post_type);
 		return $_wp_last_object_menu + $c;
 	}
 

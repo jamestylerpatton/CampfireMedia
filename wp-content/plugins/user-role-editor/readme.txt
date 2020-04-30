@@ -3,9 +3,9 @@ Contributors: shinephp
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=vladimir%40shinephp%2ecom&lc=RU&item_name=ShinePHP%2ecom&item_number=User%20Role%20Editor%20WordPress%20plugin&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Tags: user, role, editor, security, access, permission, capability
 Requires at least: 4.0
-Tested up to: 5.1
-Stable tag: 4.50
-Requires PHP: 5.5
+Tested up to: 5.4
+Stable tag: 4.53.1
+Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,29 +81,26 @@ https://translate.wordpress.org/projects/wp-plugins/user-role-editor/
 
 == Changelog =
 
-= [4.50] 03.02.2019 =
-* PHP version 5.5 was marked as required.
-* Update: General code restructure and optimization.
-* Update: URE_Base_Lib::get_blog_ids() returns null, if it's called under WordPress single site (not multisite).
-* Update: URE_Editor::prepare_capabilities_to_save() : "Invalid argument supplied for foreach()" warning was excluded in case there was no valid data structures initialization.
-* Update: 'administrator' role protection was enhanced. URE always does not allow to revoke capability from 'administrator' role. That was possible earlier after the 'administrator' role update.
-* Update: 2 new actions 'ure_settings_tools_show' and 'ure_settings_tools_exec' allows to extends the list of sections available at the Settings->User Role Editor->Tools tab.
+= [4.53.1] 22.03.2020 =
+* New: "Hide Pro banner" checkbox works via AJAX without full page refresh.
+* Fix: Undefined variable: $message at wp-content/plugins/user-role-editor/includes/classes/editor.php:898
+* Update: Few English grammar enhancements.
 
-= [4.49] 15.01.2019 =
-* Update: Selected role ID was added to "Delete role" confirmation dialog.
-* Update: Method URE_Base_Lib::get_short_list_str() was enhanced.
-* Update: Method URE_Base_Lib::get_blog_ids() was made public.
-* Update: Method URE_Lib::get_usermeta_table_name() was excluded.
-* Fix: PHP warning "Undefined index:'unexisted role ID'" was fixed at URE_Lib::roles_text() (wp-content/plugins/user-role-editor/includes/classes/lib.php:360).
-* Fix: Bug was fixed with incorrect usage of transient for option "Show deprecated capabilities".
+= [4.53] 01.02.2020 =
+* Update: "Add role", "Delete role", "Rename role", "Add capability", "Delete capability" do not reload full page on completion, but use AJAX for data exchange with server and refresh parts of the page via JavaScript.
+* Update: Multisite: "Allow non super administrators to create, edit, and delete users" option: priority for 'map_meta_cap' filter priority was raised from 1 to 99, in order make possible to overwrite changes made by other plugins, like WooCommerce.
+* Fix: Some English grammar mistakes.
 
-= [4.48] 03.01.2019 =
-* Update: Multisite: Sites list is not requested from the database on every page opened in order to reduce server load.
-* Update: URE plugin version update routine is called now at the wp-admin backend only.
-* Update: Direct access to URE_Lib::bbpress property was excluded as a preparation to future code enhancements. 
+= [4.52.2] 26.12.2019 =
+* Fix: Custom capabilities for custom post types was not created by URE automatically since version 4.52.1.
+* Fix: 'administrator' role protection did not show to power users roles with 'administrator' word inside, like 'shop_administrator', etc.
+
+= [4.52.1] 11.11.2019 =
+* Update: URE requires PHP version 5.6.
+* ure_cpt_editor_roles filter was added. It takes 2 parameters: array $roles with 1 element 'administrator' by default and $post_type with post type name string. Add other role(s) to which you wish automatically add all user capabilities for custom post type $post_type. URE updates roles this way before opening "Users->User Role Editor" page.
+* New user capability 'ure_nav_menus_access' was added. It's used at the User Role Editor Pro only.
 
 File changelog.txt contains the full list of changes.
-
 
 == Additional Documentation ==
 
@@ -112,8 +109,7 @@ You can find more information about "User Role Editor" plugin at [this page](htt
 I am ready to answer on your questions about plugin usage. Use [plugin page comments](http://www.shinephp.com/user-role-editor-wordpress-plugin/) for that.
 
 == Upgrade Notice ==
-= [4.47] 12.11.2018 =
-* Update: Code was restructured, optimized. Almost 100% of the code was covered by PHPUnit tests.
-
-
-
+= [4.53.1] 22.03.2020 =
+* New: "Hide Pro banner" checkbox works via AJAX without full page refresh.
+* Fix: Undefined variable: message at wp-content/plugins/user-role-editor/includes/classes/editor.php:898
+* Update: Few English grammar enhancements.

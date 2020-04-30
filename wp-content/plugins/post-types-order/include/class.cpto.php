@@ -56,6 +56,8 @@
             */
             function on_init()
                 {
+                    //add compatibility 
+                    include_once(CPTPATH . '/compatibility/the-events-calendar.php');
                     
                     if(is_admin())
                         return;
@@ -65,7 +67,11 @@
                     $options          =     $this->functions->get_options();
                     
                     $navigation_sort_apply   =  ($options['navigation_sort_apply'] ==  "1")    ?   TRUE    :   FALSE;
+                    
+                    //Deprecated, rely on pto/navigation_sort_apply
                     $navigation_sort_apply   =  apply_filters('cpto/navigation_sort_apply', $navigation_sort_apply);
+                    
+                    $navigation_sort_apply   =  apply_filters('pto/navigation_sort_apply', $navigation_sort_apply);
                     
                     if( !   $navigation_sort_apply)
                         return;
@@ -162,6 +168,8 @@
                                         
                                         global $post;
                                         
+                                        $order  =   apply_filters('pto/posts_order', '', $query);
+                                        
                                         //temporary ignore ACF group and admin ajax calls, should be fixed within ACF plugin sometime later
                                         if (is_object($post) && $post->post_type    ==  "acf-field-group"
                                                 ||  (defined('DOING_AJAX') && isset($_REQUEST['action']) && strpos($_REQUEST['action'], 'acf/') === 0))
@@ -170,7 +178,7 @@
                                         if(isset($_POST['query'])   &&  isset($_POST['query']['post__in'])  &&  is_array($_POST['query']['post__in'])   &&  count($_POST['query']['post__in'])  >   0)
                                             return $orderBy;   
                                         
-                                        $orderBy = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
+                                        $orderBy = "{$wpdb->posts}.menu_order {$order}, {$wpdb->posts}.post_date DESC";
                                     }
                             }
                         else
@@ -178,6 +186,8 @@
                                 $order  =   '';
                                 if ($options['use_query_ASC_DESC'] == "1")
                                     $order  =   isset($query->query_vars['order'])  ?   " " . $query->query_vars['order'] : '';
+                                
+                                $order  =   apply_filters('pto/posts_order', $order, $query);
                                 
                                 if ($options['autosort'] == "1")
                                     {
@@ -204,7 +214,7 @@
                         
                     ?>
                         <div class="error fade">
-                            <p><strong><?php _e('Post Types Order must be configured. Please go to', 'post-types-order') ?> <a href="<?php echo get_admin_url() ?>options-general.php?page=cpto-options"><?php _e('Settings Page', 'post-types-order') ?></a> <?php _e('make the configuration and save', 'post-types-order') ?></strong></p>
+                            <p><strong><?php esc_html_e('Post Types Order must be configured. Please go to', 'post-types-order'); ?> <a href="<?php echo esc_attr( get_admin_url() ); ?>options-general.php?page=cpto-options"><?php esc_html_e('Settings Page', 'post-types-order'); ?></a> <?php esc_html_e('make the configuration and save', 'post-types-order'); ?></strong></p>
                         </div>
                     <?php
                 }
@@ -248,11 +258,11 @@
                     $screen = get_current_screen();
                         
                     //check if the right interface
-                    if(!isset($screen->post_type)   ||  empty($screen->post_type))
+                    if( !isset( $screen->post_type )   ||  empty($screen->post_type))
                         return;
                         
                     //check if post type is sortable
-                    if(isset($options['show_reorder_interfaces'][$screen->post_type]) && $options['show_reorder_interfaces'][$screen->post_type] != 'show')
+                    if(isset($options['show_reorder_interfaces'][$screen->post_type]) && $options['show_reorder_interfaces'][ $screen->post_type ] != 'show')
                         return;
                     
                     //if is taxonomy term filter return
@@ -282,7 +292,8 @@
                     
                     // Localize the script with new data
                     $CPTO_variables = array(
-                                                'archive_sort_nonce' => wp_create_nonce( 'CPTO_archive_sort_nonce_' . $userdata->ID)
+                                                'post_type'             =>  $screen->post_type,
+                                                'archive_sort_nonce'    =>  wp_create_nonce( 'CPTO_archive_sort_nonce_' . $userdata->ID) 
                                             );
                     wp_localize_script( 'cpto', 'CPTO', $CPTO_variables );
 
@@ -352,7 +363,11 @@
                                                     $id =   (int)$id;
                                                     
                                                     $data = array('menu_order' => $position);
+                                                    
+                                                    //Deprecated, rely on pto/save-ajax-order
                                                     $data = apply_filters('post-types-order_save-ajax-order', $data, $key, $id);
+                                                    
+                                                    $data = apply_filters('pto/save-ajax-order', $data, $key, $id);
                                                     
                                                     $wpdb->update( $wpdb->posts, $data, array('ID' => $id) );
                                                 } 
@@ -366,7 +381,11 @@
                                                     $id =   (int)$id;
                                                     
                                                     $data = array('menu_order' => $position, 'post_parent' => str_replace('item_', '', $key));
+                                                    
+                                                    //Deprecated, rely on pto/save-ajax-order 
                                                     $data = apply_filters('post-types-order_save-ajax-order', $data, $key, $id);
+                                                    
+                                                    $data = apply_filters('pto/save-ajax-order', $data, $key, $id);
                                                     
                                                     $wpdb->update( $wpdb->posts, $data, array('ID' => $id) );
                                                 }
@@ -406,7 +425,7 @@
                     
                     //retrieve a list of all objects
                     $mysql_query    =   $wpdb->prepare("SELECT ID FROM ". $wpdb->posts ." 
-                                                            WHERE post_type = %s AND post_status IN ('publish', 'pending', 'draft', 'private', 'future')
+                                                            WHERE post_type = %s AND post_status IN ('publish', 'pending', 'draft', 'private', 'future', 'inherit')
                                                             ORDER BY menu_order, post_date DESC", $post_type);
                     $results        =   $wpdb->get_results($mysql_query);
                     
@@ -442,7 +461,11 @@
                             $data = array(
                                             'menu_order' => $menu_order
                                             );
+                            
+                            //Deprecated, rely on pto/save-ajax-order
                             $data = apply_filters('post-types-order_save-ajax-order', $data, $menu_order, $id);
+                            
+                            $data = apply_filters('pto/save-ajax-order', $data, $menu_order, $id);
                             
                             $wpdb->update( $wpdb->posts, $data, array('ID' => $id) );
                         }
@@ -493,14 +516,16 @@
                                 
                             if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] != 'show')
                                 continue;
+                                
+                            $required_capability = apply_filters('pto/edit_capability', $capability, $post_type_name);
                             
                             if ($post_type_name == 'post')
-                                add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );
+                                add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );
                             elseif ($post_type_name == 'attachment') 
-                                add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') ); 
+                                add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') ); 
                             else
                                 {
-                                    add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );    
+                                    add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'SortPage') );    
                                 }
                         }
                 }
@@ -511,7 +536,7 @@
                     ?>
                     <div id="cpto" class="wrap">
                         <div class="icon32" id="icon-edit"><br></div>
-                        <h2><?php echo $this->current_post_type->labels->singular_name . ' -  '. __('Re-Order', 'post-types-order') ?></h2>
+                        <h2><?php echo esc_html( $this->current_post_type->labels->singular_name . ' -  '. esc_html__('Re-Order', 'post-types-order') ); ?></h2>
 
                         <?php $this->functions->cpt_info_box(); ?>  
                         
@@ -519,7 +544,7 @@
                         
                         <noscript>
                             <div class="error message">
-                                <p><?php _e('This plugin can\'t work without javascript, because it\'s use drag and drop and AJAX.', 'post-types-order') ?></p>
+                                <p><?php esc_html_e('This plugin can\'t work without javascript, because it\'s use drag and drop and AJAX.', 'post-types-order'); ?></p>
                             </div>
                         </noscript>
                         
@@ -532,7 +557,7 @@
                         </div>
                         
                         <p class="submit">
-                            <a href="javascript: void(0)" id="save-order" class="button-primary"><?php _e('Update', 'post-types-order' ) ?></a>
+                            <a href="javascript: void(0)" id="save-order" class="button-primary"><?php esc_html_e('Update', 'post-types-order' ); ?></a>
                         </p>
                         
                         <?php wp_nonce_field( 'interface_sort_nonce', 'interface_sort_nonce' ); ?>
@@ -553,7 +578,7 @@
                                     jQuery("html, body").animate({ scrollTop: 0 }, "fast");
                                     
                                     jQuery.post( ajaxurl, { action:'update-custom-type-order', order:jQuery("#sortable").sortable("serialize"), 'interface_sort_nonce' : jQuery('#interface_sort_nonce').val() }, function() {
-                                        jQuery("#ajax-response").html('<div class="message updated fade"><p><?php _e('Items Order Updated', 'post-types-order') ?></p></div>');
+                                        jQuery("#ajax-response").html('<div class="message updated fade"><p><?php esc_html_e('Items Order Updated', 'post-types-order') ?></p></div>');
                                         jQuery("#ajax-response div").delay(3000).hide("slow");
                                     });
                                 });
@@ -580,7 +605,7 @@
                     $output = '';
 
                     $r['exclude'] = implode( ',', apply_filters('wp_list_pages_excludes', array()) );
-
+                    
                     // Query pages.
                     $r['hierarchical'] = 0;
                     $args = array(
@@ -602,9 +627,7 @@
                             $output .= $this->walkTree($pages, $r['depth'], $r);
                         }
 
-                    $output = apply_filters('wp_list_pages', $output, $r);
-
-                    echo $output;
+                    echo    wp_kses_post    (   $output );
                 }
             
             function walkTree($pages, $depth, $r) 

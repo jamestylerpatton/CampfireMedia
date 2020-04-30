@@ -79,6 +79,7 @@ class PostTypeRepository
 			$post_types[$type->name]->page_assignment_id = $this->configuredFields($type->name, 'post_type_page_assignment_page_id');
 			$post_types[$type->name]->page_assignment_title = $this->configuredFields($type->name, 'post_type_page_assignment_page_title');
 			$post_types[$type->name]->sort_options = $this->configuredFields($type->name, 'sort_options');
+			$post_types[$type->name]->custom_statuses = $this->configuredFields($type->name, 'custom_statuses');
 		}
 		return $post_types;
 	}
@@ -94,6 +95,27 @@ class PostTypeRepository
 		foreach ( $all_types as $type ){
 			if ( $type->name == $post_type ) $formatted_type = $type;
 		}
+		$row_actions = [
+			'wpml', 
+			'comments', 
+			'insert_before', 
+			'insert_after', 
+			'push_to_top', 
+			'push_to_bottom', 
+			'clone', 
+			'quickedit', 
+			'view', 
+			'trash'
+		];
+		if ( $formatted_type->hierarchical ){
+			$row_actions[] = 'add_child_link';
+			$row_actions[] = 'add_child_page';
+		}
+		$filtered_row_actions = [];
+		foreach ( $row_actions as $action ){
+			if ( apply_filters("nestedpages_row_action_$action", true, $post_type) ) $filtered_row_actions[] = $action;
+		}
+		$formatted_type->row_actions = $filtered_row_actions;
 		return $formatted_type;
 	}
 
@@ -388,7 +410,8 @@ class PostTypeRepository
 	*/
 	public function getSubmenuText($post_type)
 	{
-		return ( $post_type->hierarchical ) ? __('Nested View', 'wp-nested-pages') : __('Sort View', 'wp-nested-pages');
+		$label = ( $post_type->hierarchical ) ? __('Nested View', 'wp-nested-pages') : __('Sort View', 'wp-nested-pages'); 
+		return apply_filters('nestedpages_sortview_text', $label, $post_type);
 	}
 
 	/**
@@ -437,5 +460,30 @@ class PostTypeRepository
 			if ( isset($options->page_assignment) && $options->page_assignment == 'true' && isset($options->page_assignment_id) && $options->page_assignment_id !== '' ) $array[$options->page_assignment_id] = $type;
 		}
 		return $array;
+	}
+
+	/**
+	* Get quick edit post statuses for the post type
+	*/
+	public function quickEditStatuses($post_type)
+	{
+		$custom_statuses = ( isset($this->enabled_post_types[$post_type]['custom_statuses']) && !empty($this->enabled_post_types[$post_type]['custom_statuses']) ) ? $this->enabled_post_types[$post_type]['custom_statuses'] : null;
+		$statuses = [
+			'can_publish' => [
+				'publish' => __('Published', 'wp-nested-pages'),
+				'future' => __('Scheduled', 'wp-nested-pages'),
+			],
+			'other' => [
+				'pending' => __('Pending Review', 'wp-nested-pages'),
+				'draft' => __('Draft', 'wp-nested-pages'),
+			]
+		];
+		if ( $custom_statuses ) :
+			global $wp_post_statuses;
+			foreach ( $custom_statuses as $custom_status ) {
+				$statuses['other'][$custom_status] = $wp_post_statuses[$custom_status]->label;
+			}
+		endif;
+		return apply_filters('nestedpages_quickedit_post_statuses', $statuses, $post_type);
 	}
 }

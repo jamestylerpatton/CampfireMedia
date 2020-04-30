@@ -3,14 +3,14 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, sort, post sort, posts sort, post type order, custom order, admin posts order
 Requires at least: 2.8
-Tested up to: 4.9.7
-Stable tag: 1.9.3.9
+Tested up to: 5.4
+Stable tag: 1.9.4.3
 
 Post Order and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
 == Description ==
 
-<strong>Over 3.2 MILLIONS DOWNLOADS and near PERFECT rating out of 200 REVIEWS</strong>. <br />
+<strong>Over 4 MILLIONS DOWNLOADS and near PERFECT rating out of 200 REVIEWS</strong>. <br />
 A powerful plugin, Order Posts and Post Types Objects using a Drag and Drop Sortable JavaScript capability. 
 
 The order can be customized within **default WordPress post type archive list page** or **a separate Re-Order interface** which display all objects.
@@ -65,7 +65,7 @@ Unlike many other plugins, you don't have to do any code changes to make your po
 
 = How to manually apply the sort on queries =
 
-Include a 'orderby' => 'menu_order' property within your custom query.
+Include a 'orderby' => 'menu_order' property within your custom query arguments.
 
 = What kind of posts/pages this plugin allow me to sort? =
 
@@ -93,6 +93,18 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==
+
+= 1.9.4.3 =
+  - Option text translation update
+  - Changed the posts class to to wp-list-table when applying sortable for better compatibility  
+  - Compatibility tag update for WordPress 5.4
+
+= 1.9.4.2 =
+  - Compatibility tag update for WordPress 5.3
+
+= 1.9.4.1 =
+  - Ignore the Events Calendar posts
+  - Filter typo fix
 
 = 1.9.3.9 =
   - Ignore sorting when doing Search and there's a search key-phrase specified.
