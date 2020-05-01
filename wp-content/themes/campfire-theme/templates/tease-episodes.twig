@@ -5,7 +5,7 @@
             <img src="{{ episode_podcast.thumbnail.src('featured_square') }}" alt="{{ episode_podcast.title }} Image">
         </a>
     </div>
-    <div class="item-description-block w-75 w-sm-100">
+    <div class="item-description-block">
         <p class="podcast-title"><a href="{{ episode_podcast.link }}">{{ episode_podcast.title }}</a></p>
         <p class="episode-title"><a href="{{ episode.link }}">{{ episode.title }}</a></p>
         <p class="date">{{ episode.post_date|date('n/j/y') }}</p>
