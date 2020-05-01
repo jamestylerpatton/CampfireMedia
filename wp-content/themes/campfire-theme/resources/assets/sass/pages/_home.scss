@@ -7,10 +7,10 @@
         display: block;
     }
     .item{
-        border: 2px solid darken($white, 6%);
+        // border: 2px solid darken($white, 6%);
         max-width: 100%;
-        margin: 0 15px;
-        border-radius: 5px;
+        // margin: 0 15px;
+        // border-radius: 5px;
         display: none;
         &:first-child{
             display: block;
@@ -20,7 +20,7 @@
         display: block;
     }
     .banner-carousel{
-        padding: 0 50px;
+        // padding: 0 50px;
         .owl-stage-outer{
             margin: auto;
             overflow: visible;
