@@ -3,7 +3,7 @@
 {% block content %}
     {% if podcast %}
         {% set episode_podcast = TimberPost(podcast) %}
-        <div class="row mb-4 mt-2">
+        <div class="row mt-4">
             <div class="col text-uppercase">
                 <div class="breadcrumbs">
                     <a href="/">HOME</a> /
@@ -15,7 +15,7 @@
         </div>
     {% endif %}
 
-    {% if title %}<h1 class="h2 mb-4">{{title}}</h1>{% endif %}
+    {% if title %}<h1 class="h2 mb-4 mt-4">{{title}}</h1>{% endif %}
 
     <div class="row episode-container">
         {% for episode in posts %}
