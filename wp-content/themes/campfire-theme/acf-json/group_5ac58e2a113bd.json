@@ -121,6 +121,22 @@
             },
             "default_value": "",
             "placeholder": ""
+        },
+        {
+            "key": "field_5eab96c90aaf5",
+            "label": "Spotify URL",
+            "name": "spotify_url",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
         }
     ],
     "location": [
@@ -140,5 +156,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1525832731
+    "modified": 1588303576
 }
