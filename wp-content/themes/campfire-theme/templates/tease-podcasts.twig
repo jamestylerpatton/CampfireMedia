@@ -1,6 +1,12 @@
 <div class="item podcast">
     <a href="{{ podcast.link }}" class="item-img">
-        <img src="{{ podcast.thumbnail.src('featured_square') }}" alt="{{ podcast.title }} Image">
+        {% if podcast.get_field('banner_image') %}
+            {% set banner = TimberImage(podcast.get_field('banner_image')) %}
+        {% else %}
+            {% set banner = podcast.thumbnail %}
+        {% endif %}
+        <img class="d-block d-sm-none" src="{{ banner.src|resize(800, 300) }}" alt="{{ podcast.title }} Banner">
+        <img class="d-none d-sm-block" src="{{ podcast.thumbnail.src('featured_square') }}" alt="{{ podcast.title }} Image">
     </a>
     <div class="item-title">
         <a href="{{ podcast.link }}">{{ podcast.title }}</a>

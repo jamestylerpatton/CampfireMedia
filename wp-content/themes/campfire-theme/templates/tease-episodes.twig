@@ -1,7 +1,13 @@
 {% set episode_podcast = TimberPost(episode.get_field('podcast')) %}
 <div class="item episode">
     <a href="{{ episode.link }}" class="item-img">
-        <img src="{{ episode_podcast.thumbnail.src('featured_square') }}" alt="{{ episode_podcast.title }} Image">
+        {% if episode_podcast.get_field('banner_image') %}
+            {% set banner = TimberImage(episode_podcast.get_field('banner_image')) %}
+        {% else %}
+            {% set banner = episode.thumbnail %}
+        {% endif %}
+        <img class="d-block d-sm-none" src="{{ banner.src|resize(800, 300) }}" alt="{{ episode.title }} Banner">
+        <img class="d-none d-sm-block" src="{{ episode_podcast.thumbnail.src('featured_square') }}" alt="{{ episode_podcast.title }} Image">
     </a>
     <div class="item-description-block">
         <p class="podcast-title"><a href="{{ episode_podcast.link }}">{{ episode_podcast.title }}</a></p>
