@@ -34,6 +34,17 @@
     margin-bottom: 40px;
 }
 
+@include media-breakpoint-down(xs) {
+    #latest-episodes{
+        .item-img-container{
+            width: 33.3333333%;
+        }
+        .item-description-block{
+            width: 66.6666666%;
+        }
+    }
+}
+
 #newsletter-signup{
     background-color: $yellow;
     padding: 40px 20px;

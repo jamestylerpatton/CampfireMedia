@@ -25,15 +25,17 @@
                 {% if options.apple_podcasts_url %}
                     <a target="_blank" href="{{ options.apple_podcasts_url }}" class="apple-podcasts-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
                 {% endif %}
-                {% if options.facebook_url %}
-                    <a target="_blank" href="{{ options.facebook_url }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
-                {% endif %}
-                {% if options.twitter_url %}
-                    <a target="_blank" href="{{ options.twitter_url }}" class="social-link d-inline-block p-2"><i class="fab fa-twitter"></i></a>
-                {% endif %}
-                {% if options.instagram_url %}
-                    <a target="_blank" href="{{ options.instagram_url }}" class="social-link d-inline-block p-2"><i class="fab fa-instagram"></i></a>
-                {% endif %}
+                <div class="socials d-block d-sm-inline mt-3 mt-sm-0">
+                    {% if options.facebook_url %}
+                        <a target="_blank" href="{{ options.facebook_url }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
+                    {% endif %}
+                    {% if options.twitter_url %}
+                        <a target="_blank" href="{{ options.twitter_url }}" class="social-link d-inline-block p-2"><i class="fab fa-twitter"></i></a>
+                    {% endif %}
+                    {% if options.instagram_url %}
+                        <a target="_blank" href="{{ options.instagram_url }}" class="social-link d-inline-block p-2"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
+                </div>
             </nav>
         </div>
     </div>
