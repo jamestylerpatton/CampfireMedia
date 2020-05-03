@@ -8,7 +8,13 @@
     }
     .links-row{
         border-top: 2px solid darken($white, 10%);
+    }
+    .logo-row{
         border-bottom: 2px solid darken($white, 10%);
+        img{
+            width: 67px;
+            height: 110px;
+        }
     }
     .links-col{
         font-size: 0.88rem;

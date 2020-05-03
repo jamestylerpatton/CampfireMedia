@@ -32,6 +32,10 @@
 #latest-episodes,
 #featured-episodes{
     margin-bottom: 40px;
+    .header-img-accent{
+        width: 222px;
+        height: 54px;
+    }
 }
 
 @include media-breakpoint-down(xs) {
@@ -54,6 +58,7 @@
     }
     img{
         max-width: 100%;
+        max-height: 36px;
     }
     #mc_embed_signup{
         width: 100%;

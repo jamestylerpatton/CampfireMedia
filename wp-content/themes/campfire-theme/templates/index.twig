@@ -66,7 +66,7 @@
                 <div class="align-self-center m-auto pt-3 pb-3">
                     {# <h3 class="newsletter-header m-0">JOIN THE BONFIRE</h3> #}
                     <div>
-                        <img class="mb-2" src="{{ site.theme.link }}/resources/images/text/join-the-bonfire.png" alt="JOIN THE BONFIRE" title="JOIN THE BONFIRE">
+                        <img class="mb-2" src="{{ site.theme.link }}/resources/images/buttons/join-the-bonfire.png" alt="JOIN THE BONFIRE" title="JOIN THE BONFIRE">
                         <div class="text-center">Weekly emails about your favorite Campfire Media shows!</div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
     </div>
 
     <section id="latest-episodes">
-        <img class="mb-2" src="{{ site.theme.link }}/resources/images/test-images/header-img-accent.png">
+        <img class="header-img-accent mb-2" src="{{ site.theme.link }}/resources/images/header-img-accent.svg">
         <h3 class="mb-3">Latest Episodes</h3>
 
         <div class="row">
@@ -112,7 +112,7 @@
         <div class="text-center">
             <a href="/episodes" class="btn btn-gradient btn-shadow btn-image-text">
                 <span class="sr-only">SEE ALL</span>
-                <img src="{{ site.theme.link }}/resources/images/text/see-all.png" alt="SEE ALL">
+                <img src="{{ site.theme.link }}/resources/images/buttons/see-all.png" alt="SEE ALL">
             </a>
         </div>
     </section>
@@ -122,6 +122,6 @@
     {% for post in posts %}
         {% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
     {% endfor %}
-    
+
     {% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %} #}
 {% endblock %}

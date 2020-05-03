@@ -1,7 +1,7 @@
 <div class="container">
-    <div class="row links-row pt-3 pb-3">
-        <div class="col-md links-col">
-            <nav class="text-center text-md-left">
+    <div class="row links-row pt-3">
+        <div class="col-xl links-col mb-3 mb-xl-0">
+            <nav class="text-center text-xl-left">
                 <a href="/" class="d-inline-block p-2">Home</a>
                 <a href="/about" class="d-inline-block p-2">About</a>
                 <a href="/podcasts" class="d-inline-block p-2">Podcasts</a>
@@ -10,20 +10,13 @@
                 <a href="https://www.teepublic.com/user/campfiremedia" target="_blank" class="d-inline-block p-2">Shop</a>
             </nav>
         </div>
-        <div class="col-md-1 logo-col">
-            <div class="text-center pt-4 pb-4">
-                <a class="d-inline-block" href="/">
-                    <img class="d-block" src="{{ site.theme.link }}/resources/images/campfire-logo-icon.png" alt="{{ site.name }}">
-                </a>
-            </div>
-        </div>
-        <div class="col-md socials-col">
-            <nav class="text-center text-md-right social-links">
-                {% if options.spotify_url %}
-                    <a target="_blank" href="{{ options.spotify_url }}" class="spotify-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-spotify.png" alt="Listen on Spotify"></a>
-                {% endif %}
+        <div class="col-xl socials-col mb-3 mb-xl-0">
+            <nav class="text-center text-xl-right social-links">
                 {% if options.apple_podcasts_url %}
                     <a target="_blank" href="{{ options.apple_podcasts_url }}" class="apple-podcasts-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
+                {% endif %}
+                {% if options.spotify_url %}
+                    <a target="_blank" href="{{ options.spotify_url }}" class="spotify-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/spotify-podcast-badge.png" alt="Listen on Spotify"></a>
                 {% endif %}
                 <div class="socials d-block d-sm-inline mt-3 mt-sm-0">
                     {% if options.facebook_url %}
@@ -37,6 +30,15 @@
                     {% endif %}
                 </div>
             </nav>
+        </div>
+    </div>
+    <div class="row logo-row">
+        <div class="col logo-col">
+            <div class="text-center pt-4 pt-xl-1 pb-4">
+                <a class="d-inline-block" href="/">
+                    <img class="d-block" src="{{ site.theme.link }}/resources/images/campfire-logo-icon.svg" alt="{{ site.name }}">
+                </a>
+            </div>
         </div>
     </div>
     <div class="row copy-row pt-3 pb-5">
