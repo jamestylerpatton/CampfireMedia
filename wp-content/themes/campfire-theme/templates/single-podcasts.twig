@@ -23,11 +23,8 @@
             </div>
         </div>
 
-        <div class="banner-socials container">
+        {# <div class="banner-socials container">
             <nav class="text-right social-links mb-2">
-                {# {% if post.apple_podcasts %}
-                <a target="_blank" href="{{ post.apple_podcasts }}" class="apple-podcasts-link d-inline-block pr-1"><img src="{{ site.theme.link }}/resources/images/subscribe-apple.png" alt="Subscribe on Apple"></a>
-                {% endif %} #}
                 {% if post.facebook %}
                 <a target="_blank" href="{{ post.facebook }}" class="social-link d-inline-block p-2"><i class="fab fa-facebook-f"></i></a>
                 {% endif %}
@@ -38,7 +35,7 @@
                 <a target="_blank" href="{{ post.instagram }}" class="social-link d-inline-block p-2"><i class="fab fa-instagram"></i></a>
                 {% endif %}
             </nav>
-        </div>
+        </div> #}
     </div>
 {% endblock %}
 
@@ -57,6 +54,7 @@
 
         <div class="row">
             <div class="mb-5 {{ post.get_field('modules') ? 'col-lg-3 col-sm-6' : 'col-lg-6' }}">
+                {% if post.apple_podcasts or post.spotify %}
                 <div class="podcast-content-external-links mb-2">
                     {% if post.apple_podcasts %}
                     <a target="_blank" href="{{ post.apple_podcasts }}" class="apple-podcasts d-inline-block pr-2">
@@ -64,13 +62,24 @@
                     </a>
                     {% endif %}
                     {% if post.spotify %}
-                    <a target="_blank" href="{{post.spotify}}" class="spotify pr-2" title="Listen on Spotify">
-                        <i class="fab fa-spotify"></i>
-                    </a>
+                    <a target="_blank" href="{{post.spotify}}" class="spotify-link d-inline-block pr-2"><img src="{{ site.theme.link }}/resources/images/spotify-podcast-badge.png" alt="Listen on Spotify"></a>
                     {% endif %}
-                    <a target="_blank" href="{{post.rss_feed_url}}" class="rss" title="RSS">
+                </div>
+                {% endif %}
+                <div class="podcast-content-external-links mb-3">
+                    <a target="_blank" href="{{post.rss_feed_url}}" class="social-link d-inline-block mr-3" title="RSS">
                         <i class="fas fa-rss"></i>
                     </a>
+
+                    {% if post.facebook %}
+                    <a target="_blank" href="{{ post.facebook }}" class="social-link d-inline-block mr-3"><i class="fab fa-facebook-f"></i></a>
+                    {% endif %}
+                    {% if post.twitter %}
+                    <a target="_blank" href="{{ post.twitter }}" class="social-link d-inline-block mr-3"><i class="fab fa-twitter"></i></a>
+                    {% endif %}
+                    {% if post.instagram %}
+                    <a target="_blank" href="{{ post.instagram }}" class="social-link d-inline-block mr-3"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
                 </div>
 
                 <h1 class="h3 text-uppercase">About The Show</h1>
