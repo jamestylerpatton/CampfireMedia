@@ -98,7 +98,7 @@ class StarterSite extends TimberSite {
 		// wp_enqueue_style('mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.8/mediaelementplayer.min.css');
 		wp_enqueue_style('wp-mediaelement');
 
-		wp_enqueue_style('app', get_template_directory_uri() . '/css/app.css', false, '1.4', 'all');
+		wp_enqueue_style('app', get_template_directory_uri() . '/css/app.css', false, '1.5', 'all');
 	}
 
 	function load_scripts() {
