@@ -1,18 +1,14 @@
 <?php
-/**
- * Wrapper for WP_Query.
- *
- * @package Yoast\YoastSEO\Wrappers
- */
 
 namespace Yoast\WP\SEO\Wrappers;
 
 use WP_Query;
 
 /**
- * Class WP_Query_Wrapper
+ * Wrapper for WP_Query.
  */
 class WP_Query_Wrapper {
+
 	/**
 	 * Returns the global WP_Query object.
 	 *

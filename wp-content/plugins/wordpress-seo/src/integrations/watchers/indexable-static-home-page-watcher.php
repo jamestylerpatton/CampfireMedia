@@ -1,21 +1,24 @@
 <?php
-/**
- * Watcher that checks for changes in the page used as homepage.
- *
- * @package Yoast\YoastSEO\Watchers
- */
 
 namespace Yoast\WP\SEO\Integrations\Watchers;
 
 use Yoast\WP\SEO\Conditionals\Admin_Conditional;
-use Yoast\WP\SEO\Helpers\Url_Helper;
 use Yoast\WP\SEO\Integrations\Integration_Interface;
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
+ * Watcher that checks for changes in the page used as homepage.
+ *
  * Watches the static homepage option and updates the permalinks accordingly.
  */
 class Indexable_Static_Home_Page_Watcher implements Integration_Interface {
+
+	/**
+	 * The indexable repository.
+	 *
+	 * @var Indexable_Repository
+	 */
+	protected $repository;
 
 	/**
 	 * @inheritDoc
@@ -25,16 +28,9 @@ class Indexable_Static_Home_Page_Watcher implements Integration_Interface {
 	}
 
 	/**
-	 * The indexable repository.
-	 *
-	 * @var \Yoast\WP\SEO\Repositories\Indexable_Repository
-	 */
-	protected $repository;
-
-	/**
 	 * Indexable_Static_Home_Page_Watcher constructor.
 	 *
-	 * @param \Yoast\WP\SEO\Repositories\Indexable_Repository $repository The repository to use.
+	 * @param Indexable_Repository $repository The repository to use.
 	 *
 	 * @codeCoverageIgnore
 	 */

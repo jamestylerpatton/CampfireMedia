@@ -163,7 +163,7 @@ class Listing
 	private function pageURL()
 	{
 		$base = ( $this->post_type->name == 'post' ) ? admin_url('edit.php') : admin_url('admin.php');
-		return $base . '?page=' . $_GET['page'];
+		return $base . '?page=' . sanitize_text_field($_GET['page']);
 	}
 
 	/**
@@ -225,8 +225,8 @@ class Listing
 		$out = '';
 		$post_states = [];
 		if ( !$assigned_pt ) {
-			if ( $this->post->id == get_option('page_on_front') ) $post_states['page_on_front'] = __('Front Page', 'wp-nested-pages');
-			if ( $this->post->id == get_option('page_for_posts') ) $post_states['page_for_posts'] = __('Posts Page', 'wp-nested-pages');
+			if ( $this->post->id == get_option('page_on_front') ) $post_states['page_on_front'] = '&ndash; ' . __('Front Page', 'wp-nested-pages');
+			if ( $this->post->id == get_option('page_for_posts') ) $post_states['page_for_posts'] = '&ndash; ' . __('Posts Page', 'wp-nested-pages');
 		}
 		$post_states = apply_filters('display_post_states', $post_states, $this->post);
 		if ( empty($post_states) ) return $out;
@@ -234,8 +234,8 @@ class Listing
 		$i = 0;
 		foreach ( $post_states as $state ) {
 			++$i;
-			( $i == $state_count ) ? $sep = '' : $sep = ', ';
-			$out .= " <em class='np-page-type'><strong>&ndash; $state</strong>$sep</em>";
+			( $i == $state_count ) ? $sep = '' : $sep = ',';
+			$out .= " <em class='np-page-type'><strong>$state</strong>$sep</em>";
 		}
 		return $out;
 	}
@@ -364,7 +364,12 @@ class Listing
 		$wpml_current_language = null;
 		if ( $wpml ) $wpml_current_language = $this->integrations->plugins->wpml->getCurrentLanguage();
 
-		if ( !$this->listing_repo->isSearch() ){
+		if ( $this->listing_repo->isFiltered() ){
+			$parent_status = null;
+			$pages = $this->all_posts;
+			$level++;
+			echo '<ol class="sortable nplist visible filtered">';
+		} elseif ( !$this->listing_repo->isSearch() ) {
 			$pages = get_page_children($parent, $this->all_posts);
 			if ( !$pages ) return;
 			$parent_status = get_post_status($parent);
@@ -379,7 +384,7 @@ class Listing
 		
 		foreach($pages as $page) :
 
-			if ( $page->post_parent !== $parent && !$this->listing_repo->isSearch() ) continue;
+			if ( $page->post_parent !== $parent && !$this->listing_repo->isSearch() && !$this->listing_repo->isFiltered() ) continue;
 			$count++;
 
 			global $post;
@@ -437,11 +442,11 @@ class Listing
 
 			endif; // trash status
 			
-			if ( !$this->listing_repo->isSearch() ) $this->listPostLevel($page->ID, $count, $level);
+			if ( !$this->listing_repo->isSearch() && !$this->listing_repo->isFiltered() ) $this->listPostLevel($page->ID, $count, $level);
 
 			if ( $this->post->status !== 'trash' ) echo '</li>';
 
-			if ( $this->publishedChildrenCount($this->post) > 0 && !$this->listing_repo->isSearch() && $continue_nest ) echo '</ol>';
+			if ( $this->publishedChildrenCount($this->post) > 0 && !$this->listing_repo->isSearch() && !$this->listing_repo->isFiltered() ) echo '</ol>';
 
 		endforeach; // Loop
 			

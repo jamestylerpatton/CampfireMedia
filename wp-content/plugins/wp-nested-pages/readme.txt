@@ -1,11 +1,11 @@
 ﻿=== Nested Pages ===
 Contributors: kylephillips
-Donate link: http://nestedpages.com/
+Donate link: https://github.com/sponsors/kylephillips/
 Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
-Tested up to: 5.4
+Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 3.1.9
+Stable tag: 3.1.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,28 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.1.13 =
+* Corrects permission issues introduced in previous update
+
+= 3.1.12 =
+* Includes security updates
+* Fixes bug where posts not appearing when filtering by a non top-level hierarchical taxonomy. Allows order sorting while the list is filtered (not parent order)
+* Adds ability to save and synchronize post type archive menu items when using menu sync
+
+= 3.1.11 =
+* Security Update.
+
+= 3.1.10 =
+* Updates German translations.
+* Adds support for preview_post_link filter.
+* Bug fixes in WPML integration (thanks to Timothee Moulin).
+* Fixes issue where menu options where still available under the quick edit and bulk edit forms if the menu sync was disabled completely.
+* Fixes issue where "Hide in Nested View" option was still available under the bulk edit form if the field was disabled through the plugin settings.
+* Links full page editor admin back to nested view if the "replace menu" option is selected for the post type.
+* Removes trash dropdown selection on posts with no children.
+* Adds option to include private pages in the generated menu.
+* Allows users with edit_pages/edit_posts capabilities to see "new" options for submitting non-published content (following core functionality).
 
 = 3.1.9 =
 * Adds a custom sorting user capability for each public post type: nestedpages_sort_$type, enabling control of capabilities through 3rd party plugins. 

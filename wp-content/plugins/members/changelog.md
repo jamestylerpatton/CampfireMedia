@@ -1,5 +1,49 @@
 # Change Log
 
+## 3.1.3 - 
+
+### Changed
+
+- Disabled Content Permissions side meta box
+
+### Fixed
+
+- Issue with comma-separated roles that include spaces
+
+## 3.1.2 - 2020-09-02
+
+### Fixed
+
+- Review prompt should only show to admins
+
+## 3.1.1 - 2020-09-01
+
+### Changed
+
+- Admin UI cleanup
+
+## 3.1.0 - 2020-08-31
+
+### Fixed
+
+- Issue with custom capabilities not saving to custom roles
+
+### Changed
+
+- Admin UI 
+
+## 3.0.10 - 2020-06-23
+
+### Fixed
+
+- Users who can promote should be able to assign roles to their own account.
+
+## 3.0.9 - 2020-06-22
+
+### Fixed 
+
+- Fixed issue with ACF integration trying to bump priority on ACF menu
+
 ## 3.0.8 - 2020-04-28
 
 ### Fixed

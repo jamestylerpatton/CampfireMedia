@@ -1,6 +1,8 @@
 <?php 
 	$post_type_object = get_post_type_object( $this->post_type->name );
 	$can_publish = current_user_can( $post_type_object->cap->publish_posts );
+	$wpml_pages = ( $this->integrations->plugins->wpml->installed && $this->integrations->plugins->wpml->isDefaultLanguage()) ? true : false;
+	$has_menu_options = ( $this->user->canSortPosts($this->post_type->name) && $this->post_type->name == 'page' && !$this->listing_repo->isSearch() && !$this->settings->menusDisabled()  ) ? true : false;
 ?>
 <form data-np-bulk-edit-form class="nestedpages-bulk-edit" action="<?php echo admin_url('admin-post.php'); ?>" method="post">
 	<input type="hidden" name="action" value="npBulkEdit">
@@ -93,7 +95,7 @@
 					</select>
 				</div>
 				
-				<?php if ( current_user_can('edit_theme_options') ) : ?>
+				<?php if ( current_user_can('edit_theme_options') && !array_key_exists('hide_in_np', $this->disabled_standard_fields) ) : ?>
 				<div class="form-control">
 					<label><?php _e( 'Display in Nested View', 'wp-nested-pages' ); ?></label>
 					<select name="nested_pages_status">
@@ -103,7 +105,7 @@
 					</select>
 				</div>
 
-				<?php if ( $this->user->canSortPosts($this->post_type->name) && $this->post_type->name == 'page' ) : ?>
+				<?php if ( $this->user->canSortPosts($this->post_type->name) && $has_menu_options ) : ?>
 				<div class="form-control">
 					<label><?php _e( 'Hide in Nav Menu', 'wp-nested-pages' ); ?></label>
 					<select name="nav_status">
@@ -121,9 +123,9 @@
 		<div class="np-taxonomies">
 			<?php foreach ( $this->h_taxonomies as $taxonomy ) : ?>
 			<div class="np-taxonomy">
-				<span class="title"><?php echo esc_html__( $taxonomy->labels->name ) ?></span>
+				<span class="title"><?php esc_html_e( $taxonomy->labels->name ) ?></span>
 				<input type="hidden" name="<?php echo ( $taxonomy->name == 'category' ) ? 'post_category[]' : 'tax_input[' . esc_attr( $taxonomy->name ) . '][]'; ?>" value="0" />
-				<ul class="cat-checklist <?php echo esc_attr( $taxonomy->name )?>-checklist">
+				<ul class="cat-checklist <?php esc_attr_e( $taxonomy->name )?>-checklist">
 					<?php wp_terms_checklist( null, array( 'taxonomy' => $taxonomy->name ) ) ?>
 				</ul>
 			</div><!-- .np-taxonomy -->
@@ -131,8 +133,8 @@
 
 			<?php foreach ( $this->f_taxonomies as $taxonomy ) : ?>
 			<div class="np-taxonomy">
-				<span class="title"><?php echo esc_html__( $taxonomy->labels->name ) ?></span>
-				<textarea id="<?php echo esc_attr($taxonomy->name); ?>" cols="22" rows="1" name="tax_input[<?php echo esc_attr( $taxonomy->name )?>]" class="tax_input_<?php echo esc_attr( $taxonomy->name )?>" data-autotag data-taxonomy="<?php echo esc_attr($taxonomy->name); ?>"></textarea>
+				<span class="title"><?php esc_html_e( $taxonomy->labels->name ) ?></span>
+				<textarea id="<?php esc_attr_e($taxonomy->name); ?>" cols="22" rows="1" name="tax_input[<?php esc_attr_e( $taxonomy->name )?>]" class="tax_input_<?php esc_attr_e( $taxonomy->name )?>" data-autotag data-taxonomy="<?php esc_attr_e($taxonomy->name); ?>"></textarea>
 			</div><!-- .np-taxonomy -->
 			<?php endforeach; ?>
 		</div><!-- .taxonomies -->

@@ -1,21 +1,18 @@
 <?php
-/**
- * Generator object for the breadcrumbs.
- *
- * @package Yoast\YoastSEO\Generators
- */
 
 namespace Yoast\WP\SEO\Generators;
 
 use Yoast\WP\SEO\Context\Meta_Tags_Context;
 use Yoast\WP\SEO\Helpers\Current_Page_Helper;
 use Yoast\WP\SEO\Helpers\Options_Helper;
+use Yoast\WP\SEO\Helpers\Pagination_Helper;
+use Yoast\WP\SEO\Helpers\Post_Type_Helper;
+use Yoast\WP\SEO\Helpers\Url_Helper;
 use Yoast\WP\SEO\Models\Indexable;
-use Yoast\WP\SEO\Generators\Generator_Interface;
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
- * Represents the generator class for the Open Graph images.
+ * Represents the generator class for the breadcrumbs.
  */
 class Breadcrumbs_Generator implements Generator_Interface {
 
@@ -34,27 +31,57 @@ class Breadcrumbs_Generator implements Generator_Interface {
 	private $options;
 
 	/**
-	 * The current page helper
+	 * The current page helper.
 	 *
 	 * @var Current_Page_Helper
 	 */
-	private $current_page;
+	private $current_page_helper;
+
+	/**
+	 * The post type helper.
+	 *
+	 * @var Post_Type_Helper
+	 */
+	private $post_type_helper;
+
+	/**
+	 * The URL helper.
+	 *
+	 * @var Url_Helper;
+	 */
+	private $url_helper;
+
+	/**
+	 * The pagination helper.
+	 *
+	 * @var Pagination_Helper;
+	 */
+	private $pagination_helper;
 
 	/**
 	 * Breadcrumbs_Generator constructor.
 	 *
-	 * @param Indexable_Repository $repository   The repository.
-	 * @param Options_Helper       $options      The options helper.
-	 * @param Current_Page_Helper  $current_page The current page helper.
+	 * @param Indexable_Repository $repository          The repository.
+	 * @param Options_Helper       $options             The options helper.
+	 * @param Current_Page_Helper  $current_page_helper The current page helper.
+	 * @param Post_Type_Helper     $post_type_helper    The post type helper.
+	 * @param Url_Helper           $url_helper          The URL helper.
+	 * @param Pagination_Helper    $pagination_helper   The pagination helper.
 	 */
 	public function __construct(
 		Indexable_Repository $repository,
 		Options_Helper $options,
-		Current_Page_Helper $current_page
+		Current_Page_Helper $current_page_helper,
+		Post_Type_Helper $post_type_helper,
+		Url_Helper $url_helper,
+		Pagination_Helper $pagination_helper
 	) {
-		$this->repository   = $repository;
-		$this->options      = $options;
-		$this->current_page = $current_page;
+		$this->repository          = $repository;
+		$this->options             = $options;
+		$this->current_page_helper = $current_page_helper;
+		$this->post_type_helper    = $post_type_helper;
+		$this->url_helper          = $url_helper;
+		$this->pagination_helper   = $pagination_helper;
 	}
 
 	/**
@@ -67,8 +94,8 @@ class Breadcrumbs_Generator implements Generator_Interface {
 	public function generate( Meta_Tags_Context $context ) {
 		$static_ancestors = [];
 		$breadcrumbs_home = $this->options->get( 'breadcrumbs-home' );
-		if ( $breadcrumbs_home !== '' && ! in_array( $this->current_page->get_page_type(), [ 'Home_Page', 'Static_Home_Page' ], true ) ) {
-			$front_page_id = $this->current_page->get_front_page_id();
+		if ( $breadcrumbs_home !== '' && ! \in_array( $this->current_page_helper->get_page_type(), [ 'Home_Page', 'Static_Home_Page' ], true ) ) {
+			$front_page_id = $this->current_page_helper->get_front_page_id();
 			if ( $front_page_id === 0 ) {
 				$static_ancestors[] = $this->repository->find_for_home_page();
 			}
@@ -87,15 +114,16 @@ class Breadcrumbs_Generator implements Generator_Interface {
 			}
 		}
 		if (
-			$context->indexable->object_type === 'post' &&
-			$context->indexable->object_sub_type !== 'post' &&
-			$context->indexable->object_sub_type !== 'page'
+			$context->indexable->object_type === 'post'
+			&& $context->indexable->object_sub_type !== 'post'
+			&& $context->indexable->object_sub_type !== 'page'
+			&& $this->post_type_helper->has_archive( $context->indexable->object_sub_type )
 		) {
 			$static_ancestors[] = $this->repository->find_for_post_type_archive( $context->indexable->object_sub_type );
 		}
 		if ( $context->indexable->object_type === 'term' ) {
 			$parent = $this->get_taxonomy_post_type_parent( $context->indexable->object_sub_type );
-			if ( $parent && $parent !== 'post' ) {
+			if ( $parent && $parent !== 'post' && $this->post_type_helper->has_archive( $parent ) ) {
 				$static_ancestors[] = $this->repository->find_for_post_type_archive( $parent );
 			}
 		}
@@ -105,38 +133,54 @@ class Breadcrumbs_Generator implements Generator_Interface {
 		$indexables[] = $context->indexable;
 
 		if ( ! empty( $static_ancestors ) ) {
-			array_unshift( $indexables, ...$static_ancestors );
+			\array_unshift( $indexables, ...$static_ancestors );
 		}
 
 		$indexables = \apply_filters( 'wpseo_breadcrumb_indexables', $indexables, $context );
 
-		$crumbs = array_map( function ( Indexable $ancestor ) {
+		$callback = function ( Indexable $ancestor ) {
 			$crumb = [
 				'url'  => $ancestor->permalink,
 				'text' => $ancestor->breadcrumb_title,
 			];
-
-			if ( $ancestor->object_type === 'post' ) {
-				$crumb['id'] = $ancestor->object_id;
-			}
-			if ( $ancestor->object_type === 'post-type-archive' ) {
-				$crumb['ptarchive'] = $ancestor->object_sub_type;
+			switch ( $ancestor->object_type ) {
+				case 'post':
+					$crumb = $this->get_post_crumb( $crumb, $ancestor );
+					break;
+				case 'post-type-archive':
+					$crumb = $this->get_post_type_archive_crumb( $crumb, $ancestor );
+					break;
+				case 'term':
+					$crumb = $this->get_term_crumb( $crumb, $ancestor );
+					break;
+				case 'system-page':
+					$crumb = $this->get_system_page_crumb( $crumb, $ancestor );
+					break;
+				case 'user':
+					$crumb = $this->get_user_crumb( $crumb, $ancestor );
+					break;
+				case 'date-archive':
+					$crumb = $this->get_date_archive_crumb( $crumb );
+					break;
 			}
 			return $crumb;
-		}, $indexables );
+		};
+		$crumbs   = \array_map( $callback, $indexables );
 
 		if ( $breadcrumbs_home !== '' ) {
 			$crumbs[0]['text'] = $breadcrumbs_home;
 		}
+
+		$crumbs = $this->add_paged_crumb( $crumbs, $context->indexable );
 
 		/**
 		 * Filter: 'wpseo_breadcrumb_links' - Allow the developer to filter the Yoast SEO breadcrumb links, add to them, change order, etc.
 		 *
 		 * @api array $crumbs The crumbs array.
 		 */
-		$crumbs = apply_filters( 'wpseo_breadcrumb_links', $crumbs );
+		$crumbs = \apply_filters( 'wpseo_breadcrumb_links', $crumbs );
 
-		return array_map( function( $link_info, $index ) use ( $crumbs ) {
+		$filter_callback = function( $link_info, $index ) use ( $crumbs ) {
 			/**
 			 * Filter: 'wpseo_breadcrumb_single_link_info' - Allow developers to filter the Yoast SEO Breadcrumb link information.
 			 *
@@ -145,8 +189,116 @@ class Breadcrumbs_Generator implements Generator_Interface {
 			 * @param int $index The index of the breadcrumb in the list.
 			 * @param array $crumbs The complete list of breadcrumbs.
 			 */
-			return apply_filters( 'wpseo_breadcrumb_single_link_info', $link_info, $index, $crumbs );
-		}, $crumbs, array_keys( $crumbs ) );
+			return \apply_filters( 'wpseo_breadcrumb_single_link_info', $link_info, $index, $crumbs );
+		};
+		return \array_map( $filter_callback, $crumbs, \array_keys( $crumbs ) );
+	}
+
+	/**
+	 * Returns the modified post crumb.
+	 *
+	 * @param array     $crumb    The crumb.
+	 * @param Indexable $ancestor The indexable.
+	 *
+	 * @return array The crumb.
+	 */
+	private function get_post_crumb( $crumb, $ancestor ) {
+		$crumb['id'] = $ancestor->object_id;
+
+		return $crumb;
+	}
+
+	/**
+	 * Returns the modified post type crumb.
+	 *
+	 * @param array     $crumb    The crumb.
+	 * @param Indexable $ancestor The indexable.
+	 *
+	 * @return array The crumb.
+	 */
+	private function get_post_type_archive_crumb( $crumb, $ancestor ) {
+		$crumb['ptarchive'] = $ancestor->object_sub_type;
+
+		return $crumb;
+	}
+
+	/**
+	 * Returns the modified term crumb.
+	 *
+	 * @param array     $crumb    The crumb.
+	 * @param Indexable $ancestor The indexable.
+	 *
+	 * @return array The crumb.
+	 */
+	private function get_term_crumb( $crumb, $ancestor ) {
+		$crumb['term_id'] = $ancestor->object_id;
+
+		return $crumb;
+	}
+
+	/**
+	 * Returns the modified system page crumb.
+	 *
+	 * @param array     $crumb    The crumb.
+	 * @param Indexable $ancestor The indexable.
+	 *
+	 * @return array The crumb.
+	 */
+	private function get_system_page_crumb( $crumb, $ancestor ) {
+		if ( $ancestor->object_sub_type === 'search-result' ) {
+			$crumb['text'] = $this->options->get( 'breadcrumbs-searchprefix' ) . ' ' . \esc_html( \get_search_query() );
+			$crumb['url']  = \get_search_link();
+		}
+		elseif ( $ancestor->object_sub_type === '404' ) {
+			$crumb['text'] = $this->options->get( 'breadcrumbs-404crumb' );
+		}
+
+		return $crumb;
+	}
+
+	/**
+	 * Returns the modified user crumb.
+	 *
+	 * @param array     $crumb    The crumb.
+	 * @param Indexable $ancestor The indexable.
+	 *
+	 * @return array The crumb.
+	 */
+	private function get_user_crumb( $crumb, $ancestor ) {
+		$display_name  = \get_the_author_meta( 'display_name', $ancestor->object_id );
+		$crumb['text'] = $this->options->get( 'breadcrumbs-archiveprefix' ) . ' ' . $display_name;
+
+		return $crumb;
+	}
+
+	/**
+	 * Returns the modified date archive crumb.
+	 *
+	 * @param array $crumb The crumb.
+	 *
+	 * @return array The crumb.
+	 */
+	protected function get_date_archive_crumb( $crumb ) {
+		$home_url = $this->url_helper->home();
+		$prefix   = $this->options->get( 'breadcrumbs-archiveprefix' );
+
+		if ( \is_day() ) {
+			$day           = \esc_html( \get_the_date() );
+			$crumb['url']  = $home_url . \get_the_date( 'Y/m/d' ) . '/';
+			$crumb['text'] = $prefix . ' ' . $day;
+		}
+		elseif ( \is_month() ) {
+			$month         = \esc_html( \trim( \single_month_title( ' ', false ) ) );
+			$crumb['url']  = $home_url . \get_the_date( 'Y/m' ) . '/';
+			$crumb['text'] = $prefix . ' ' . $month;
+		}
+		elseif ( \is_year() ) {
+			$year          = \get_the_date( 'Y' );
+			$crumb['url']  = $home_url . $year . '/';
+			$crumb['text'] = $prefix . ' ' . $year;
+		}
+
+		return $crumb;
 	}
 
 	/**
@@ -173,7 +325,7 @@ class Breadcrumbs_Generator implements Generator_Interface {
 		}
 
 		// When the current page is the home page, searchpage or isn't a singular post.
-		if ( is_home() || is_search() || ! is_singular( 'post' ) ) {
+		if ( \is_home() || \is_search() || ! \is_singular( 'post' ) ) {
 			return false;
 		}
 
@@ -195,5 +347,42 @@ class Breadcrumbs_Generator implements Generator_Interface {
 		}
 
 		return $parent;
+	}
+
+	/**
+	 * Adds a crumb for the current page, if we're on an archive page or paginated post.
+	 *
+	 * @param array     $crumbs            The array of breadcrumbs.
+	 * @param Indexable $current_indexable The current indexable.
+	 *
+	 * @returns array The breadcrumbs.
+	 */
+	protected function add_paged_crumb( array $crumbs, $current_indexable ) {
+		$is_simple_page = $this->current_page_helper->is_simple_page();
+
+		// If we're not on a paged page do nothing.
+		if ( ! $is_simple_page && ! $this->current_page_helper->is_paged() ) {
+			return $crumbs;
+		}
+
+		// If we're not on a paginated post do nothing.
+		if ( $is_simple_page && $current_indexable->number_of_pages === null ) {
+			return $crumbs;
+		}
+
+		$current_page_number = $this->pagination_helper->get_current_page_number();
+		if ( $current_page_number <= 1 ) {
+			return $crumbs;
+		}
+
+		$crumbs[] = [
+			'text' => \sprintf(
+				/* translators: %s expands to the current page number */
+				\__( 'Page %s', 'wordpress-seo' ),
+				$current_page_number
+			),
+		];
+
+		return $crumbs;
 	}
 }

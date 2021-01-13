@@ -1,19 +1,13 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Third_Party
- */
 
 namespace Yoast\WP\SEO\Integrations\Third_Party;
 
 use Yoast\WP\SEO\Conditionals\Front_End_Conditional;
-use Yoast\WP\SEO\Conditionals\Migrations_Conditional;
 use Yoast\WP\SEO\Helpers\Options_Helper;
 use Yoast\WP\SEO\Integrations\Integration_Interface;
 
 /**
- * Class BbPress
+ * BbPress integration.
  */
 class BbPress implements Integration_Interface {
 
@@ -25,10 +19,12 @@ class BbPress implements Integration_Interface {
 	private $options;
 
 	/**
-	 * @inheritDoc
+	 * Returns the conditionals based in which this loadable should be active.
+	 *
+	 * @return array
 	 */
 	public static function get_conditionals() {
-		return [ Front_End_Conditional::class, Migrations_Conditional::class ];
+		return [ Front_End_Conditional::class ];
 	}
 
 	/**
@@ -43,7 +39,11 @@ class BbPress implements Integration_Interface {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Initializes the integration.
+	 *
+	 * This is the place to register hooks and filters.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		if ( $this->options->get( 'breadcrumbs-enable' ) !== true ) {
@@ -57,6 +57,6 @@ class BbPress implements Integration_Interface {
 		 * {@internal The class itself is only loaded when the template tag is encountered
 		 *            via the template tag function in the wpseo-functions.php file.}}
 		 */
-		add_filter( 'bbp_get_breadcrumb', '__return_false' );
+		\add_filter( 'bbp_get_breadcrumb', '__return_false' );
 	}
 }

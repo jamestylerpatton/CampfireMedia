@@ -1,14 +1,9 @@
 <?php
-/**
- * A helper object for the user.
- *
- * @package Yoast\YoastSEO\Helpers
- */
 
 namespace Yoast\WP\SEO\Helpers;
 
 /**
- * Class User_Helper
+ * A helper object for the user.
  */
 class User_Helper {
 
@@ -30,9 +25,9 @@ class User_Helper {
 	/**
 	 * Counts the number of posts the user has written in this post type.
 	 *
-	 * @param int          $user_id     User ID.
-	 * @param array|string $post_type   Optional. Single post type or array of post types to count the number of posts
-	 *                                  for. Default 'post'.
+	 * @param int          $user_id   User ID.
+	 * @param array|string $post_type Optional. Single post type or array of post types to count the number of posts
+	 *                                for. Default 'post'.
 	 *
 	 * @codeCoverageIgnore It only wraps a WordPress function.
 	 *
@@ -45,7 +40,7 @@ class User_Helper {
 	/**
 	 * Retrieves the requested data of the author.
 	 *
-	 * @param string    $field  The user field to retrieve.
+	 * @param string    $field   The user field to retrieve.
 	 * @param int|false $user_id User ID.
 	 *
 	 * @codeCoverageIgnore It only wraps a WordPress function.

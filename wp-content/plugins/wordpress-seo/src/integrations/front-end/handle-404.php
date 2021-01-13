@@ -1,9 +1,4 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Front_End
- */
 
 namespace Yoast\WP\SEO\Integrations\Front_End;
 
@@ -15,6 +10,7 @@ use Yoast\WP\SEO\Wrappers\WP_Query_Wrapper;
  * Handles intercepting requests.
  */
 class Handle_404 implements Integration_Interface {
+
 	/**
 	 * The WP Query wrapper.
 	 *
@@ -23,17 +19,23 @@ class Handle_404 implements Integration_Interface {
 	private $query_wrapper;
 
 	/**
-	 * @inheritDoc
+	 * Returns the conditionals based in which this loadable should be active.
+	 *
+	 * @return array
 	 */
 	public static function get_conditionals() {
 		return [ Front_End_Conditional::class ];
 	}
 
 	/**
-	 * @inheritDoc
+	 * Initializes the integration.
+	 *
+	 * This is the place to register hooks and filters.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
-		add_filter( 'pre_handle_404', [ $this, 'handle_404' ] );
+		\add_filter( 'pre_handle_404', [ $this, 'handle_404' ] );
 	}
 
 	/**
@@ -67,13 +69,14 @@ class Handle_404 implements Integration_Interface {
 
 		return true;
 	}
+
 	/**
 	 * If there are no posts in a feed, make it 404 instead of sending an empty RSS feed.
 	 *
 	 * @return bool True if it's 404.
 	 */
 	protected function is_feed_404() {
-		if ( ! is_feed() ) {
+		if ( ! \is_feed() ) {
 			return false;
 		}
 
@@ -92,12 +95,11 @@ class Handle_404 implements Integration_Interface {
 		return true;
 	}
 
-
 	/**
 	 * Sets the 404 status code.
 	 */
 	protected function set_404() {
-		$wp_query = $this->query_wrapper->get_query();
+		$wp_query          = $this->query_wrapper->get_query();
 		$wp_query->is_feed = false;
 		$wp_query->set_404();
 		$this->query_wrapper->set_query( $wp_query );
@@ -110,11 +112,11 @@ class Handle_404 implements Integration_Interface {
 	 */
 	protected function set_headers() {
 		// Overwrite Content-Type header.
-		if ( ! headers_sent() ) {
-			header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+		if ( ! \headers_sent() ) {
+			\header( 'Content-Type: ' . \get_option( 'html_type' ) . '; charset=' . \get_option( 'blog_charset' ) );
 		}
 
-		status_header( 404 );
-		nocache_headers();
+		\status_header( 404 );
+		\nocache_headers();
 	}
 }

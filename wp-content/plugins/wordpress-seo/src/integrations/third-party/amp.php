@@ -1,19 +1,13 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Third_Party
- */
 
 namespace Yoast\WP\SEO\Integrations\Third_Party;
 
 use Yoast\WP\SEO\Conditionals\Front_End_Conditional;
-use Yoast\WP\SEO\Conditionals\Migrations_Conditional;
 use Yoast\WP\SEO\Integrations\Front_End_Integration;
 use Yoast\WP\SEO\Integrations\Integration_Interface;
 
 /**
- * AMP integration
+ * AMP integration.
  */
 class AMP implements Integration_Interface {
 
@@ -25,10 +19,12 @@ class AMP implements Integration_Interface {
 	protected $front_end;
 
 	/**
-	 * @inheritDoc
+	 * Returns the conditionals based in which this loadable should be active.
+	 *
+	 * @return array
 	 */
 	public static function get_conditionals() {
-		return [ Front_End_Conditional::class, Migrations_Conditional::class ];
+		return [ Front_End_Conditional::class ];
 	}
 
 	/**
@@ -41,7 +37,11 @@ class AMP implements Integration_Interface {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Initializes the integration.
+	 *
+	 * This is the place to register hooks and filters.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		\add_action( 'amp_post_template_head', [ $this, 'remove_amp_meta_output' ], 0 );

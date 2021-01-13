@@ -1,22 +1,17 @@
 <?php
-/**
- * Generator object for the Twitter image.
- *
- * @package Yoast\WP\SEO\Generators
- */
 
 namespace Yoast\WP\SEO\Generators;
 
 use Yoast\WP\SEO\Context\Meta_Tags_Context;
+use Yoast\WP\SEO\Generators\Generator_Interface;
 use Yoast\WP\SEO\Helpers\Image_Helper;
 use Yoast\WP\SEO\Helpers\Twitter\Image_Helper as Twitter_Image_Helper;
 use Yoast\WP\SEO\Helpers\Url_Helper;
 use Yoast\WP\SEO\Models\Indexable;
-use Yoast\WP\SEO\Generators\Generator_Interface;
 use Yoast\WP\SEO\Values\Images;
 
 /**
- * Represents the generator class for the Open Graph images.
+ * Represents the generator class for the Twitter images.
  */
 class Twitter_Image_Generator implements Generator_Interface {
 
@@ -78,14 +73,13 @@ class Twitter_Image_Generator implements Generator_Interface {
 	 * @param Images    $image_container The image container.
 	 */
 	protected function add_from_indexable( Indexable $indexable, Images $image_container ) {
-		if ( $indexable->twitter_image ) {
-			$image_container->add_image_by_url( $indexable->twitter_image );
-
+		if ( $indexable->twitter_image_id ) {
+			$image_container->add_image_by_id( $indexable->twitter_image_id );
 			return;
 		}
 
-		if ( $indexable->twitter_image_id ) {
-			$image_container->add_image_by_id( $indexable->twitter_image_id );
+		if ( $indexable->twitter_image ) {
+			$image_container->add_image_by_url( $indexable->twitter_image );
 		}
 	}
 
@@ -97,7 +91,7 @@ class Twitter_Image_Generator implements Generator_Interface {
 	 * @return Images The image container.
 	 */
 	protected function get_image_container() {
-		$image_container = new Images( $this->image, $this->url );
+		$image_container             = new Images( $this->image, $this->url );
 		$image_container->image_size = $this->twitter_image->get_image_size();
 
 		return $image_container;
